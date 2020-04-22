@@ -50,11 +50,26 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
+function addArtist(artistData){
+  var unquify = getUNQfy()
+  unquify.addArtist(artistData)
+  saveUNQfy(unquify)
+}
+
 function main() {
   //console.log('arguments: ');
-  //process.argv.forEach(argument => console.log(argument));
-  let play = new Playlist("Spore", 500)
-  console.log(play.hasTrack("algo"))
+  //let args2 = process.argv.forEach(argument => console.log(argument));
+  let args = process.argv
+  
+  switch(args[2]){
+    case "addArtist":
+      var artistData = {name: args[3], country: args[4]}
+      addArtist(artistData)
+    default:
+      //nada
+  }
+
 }
+
 
 main();
