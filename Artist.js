@@ -3,11 +3,11 @@ class Artist{
         this._name = name
         this._id = id
         this._country = country
-        this._albums = new Set()
+        this._albums = []
     }
 
     addAlbum(album){
-        this._albums.add(album)
+        this._albums.unshift(album)
     }
 
 }
