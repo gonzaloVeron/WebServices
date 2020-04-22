@@ -2,5 +2,5 @@
 
 ## Grupo 4
 ### Integrantes:
-##### + Gonzalo Verón
-##### + Ignacio Mendez
+##### Gonzalo Verón
+##### Ignacio Mendez
