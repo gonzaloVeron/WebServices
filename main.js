@@ -6,6 +6,7 @@ const Playlist = require('./playlist')
 const Track = require('./track')
 const Artist = require('./artist')
 const Album = require('./album')
+const InvalidCommandException = require('./invalidCommandException')
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {
@@ -65,8 +66,26 @@ function main() {
     case "addArtist":
       var artistData = {name: args[3], country: args[4]}
       addArtist(artistData)
+    case "addAlbum":
+      //Llamar a la funcion del caso.
+    case "addTrack":
+      //Llamar a la funcion del caso.
+    case "getArtistById":
+      //Llamar a la funcion del caso.
+    case "getAlbumById":
+      //Llamar a la funcion del caso.
+    case "getTrackById":
+      //Llamar a la funcion del caso.
+    case "getPlaylistById":
+      //Llamar a la funcion del caso.
+    case "getTracksMatchingGenres":
+      //Llamar a la funcion del caso.
+    case "getTracksMatchingArtist":
+      //Llamar a la funcion del caso.
+    case "createPlaylist":
+      //Llamar a la funcion del caso.
     default:
-      //nada
+      throw new InvalidCommandException("El comando " + args[2] + " no existe")
   }
 
 }

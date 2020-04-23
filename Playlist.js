@@ -24,6 +24,10 @@ class Playlist{
         })
         return dur
     }
+
+    get name(){return this._name}
+    get tracks(){return this._tracks}
+    get genres(){return this._genres}
 }
 
 module.exports = Playlist
