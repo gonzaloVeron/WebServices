@@ -9,18 +9,26 @@ const Album = require('./album')
 class UNQfy {
   constructor(){
     this._artists = []
-    this._nextId = 0
-    
+    this._nextArtistId = 0
+    this._nextAlbumId = 0
   }
+
+  get nextArtistId(){return this._nextArtistId}
+  get nextAlbumId(){return this._nextAlbumId}
+  get artists(){return this._artists}
+
+  set nextArtistId(value){return this._nextArtistId = value}
+  set nextAlbumId(value){return this._nextAlbumId = value}
 
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
   // retorna: el nuevo artista creado
   addArtist(artistData) {
-    this._artists.unshift(new Artist(artistData.name, this._nextId, artistData.country))
-    this._nextId++
-    console.log(this)
+    let newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country)
+    this.artists.unshift(newArtist)
+    this.nextArtistId = this._nextArtistId + 1
+    return newArtist
   }
 
 
@@ -29,11 +37,12 @@ class UNQfy {
   //   albumData.year (number)
   // retorna: el nuevo album creado
   addAlbum(artistId, albumData) {
-  /* Crea un album y lo agrega al artista con id artistId.
-    El objeto album creado debe tener (al menos):
-     - una propiedad name (string)
-     - una propiedad year (number)
-  */
+    let artistFinded = this.artists.find(a => a.id == artistId)
+    let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.date, artistFinded)
+    this.nextAlbumId = this.nextAlbumId + 1
+    artistFinded.addAlbum(newAlbum)
+    console.log(newAlbum)
+    return newAlbum
   }
 
 
@@ -110,6 +119,7 @@ class UNQfy {
     const classes = [UNQfy, Artist, Album, Track, Playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
+
 }
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente

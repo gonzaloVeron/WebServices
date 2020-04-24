@@ -52,8 +52,14 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 */
 
 function addArtist(artistData){
-  var unquify = getUNQfy()
+  let unquify = getUNQfy()
   unquify.addArtist(artistData)
+  saveUNQfy(unquify)
+}
+
+function addAlbum(artistId, albumData){
+  let unquify = getUNQfy()
+  unquify.addAlbum(artistId, albumData)
   saveUNQfy(unquify)
 }
 
@@ -61,13 +67,17 @@ function main() {
   //console.log('arguments: ');
   //let args2 = process.argv.forEach(argument => console.log(argument));
   let args = process.argv
-  
+
   switch(args[2]){
     case "addArtist":
-      var artistData = {name: args[3], country: args[4]}
+      let artistData = {name: args[3], country: args[4]}
       addArtist(artistData)
+      break
     case "addAlbum":
-      //Llamar a la funcion del caso.
+      let creationDate = new Date(args[5], args[6], args[7])
+      let albumData = {name: args[4], date: creationDate}
+      addAlbum(args[3], albumData)
+      break
     case "addTrack":
       //Llamar a la funcion del caso.
     case "getArtistById":
@@ -87,7 +97,6 @@ function main() {
     default:
       throw new InvalidCommandException("El comando " + args[2] + " no existe")
   }
-
 }
 
 
