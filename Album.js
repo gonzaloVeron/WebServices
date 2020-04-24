@@ -18,7 +18,7 @@ class Album{
     get name(){return this._name}
     get id(){return this._id}
     get year(){return this._year}
-    get artist(){return this._artists}
+    get artist(){return this._artist}
     get tracks(){return this._tracks}
 }
 

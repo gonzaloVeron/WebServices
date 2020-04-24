@@ -11,14 +11,17 @@ class UNQfy {
     this._artists = []
     this._nextArtistId = 0
     this._nextAlbumId = 0
+    this._nextTrackId = 0
   }
 
   get nextArtistId(){return this._nextArtistId}
   get nextAlbumId(){return this._nextAlbumId}
+  get nextTrackId(){return this._nextTrackId}
   get artists(){return this._artists}
 
   set nextArtistId(value){return this._nextArtistId = value}
   set nextAlbumId(value){return this._nextAlbumId = value}
+  set nextTrackId(value){return this._nextTrackId = value}
 
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
@@ -52,6 +55,12 @@ class UNQfy {
   //   trackData.genres (lista de strings)
   // retorna: el nuevo track creado
   addTrack(albumId, trackData) {
+    let albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id == albumId)
+    let newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration)
+    this.nextTrackId = this.nextTrackId + 1
+    albumFinded.addTrack(newTrack)
+    console.log(newTrack)
+    return newTrack
   /* Crea un track y lo agrega al album con id albumId.
   El objeto track creado debe tener (al menos):
       - una propiedad name (string),
@@ -61,15 +70,15 @@ class UNQfy {
   }
 
   getArtistById(id) {
-
+    return this.artists.find(a => a.id == id)
   }
 
   getAlbumById(id) {
-
+    return this.artists.map(a => a.albums).flat().find(a => a.id == id)
   }
 
   getTrackById(id) {
-
+    //return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id == id)
   }
 
   getPlaylistById(id) {
