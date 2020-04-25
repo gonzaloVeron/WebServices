@@ -91,9 +91,8 @@ function main() {
       let artistData = {name: args[3], country: args[4]}
       addArtist(artistData)
       break
-    case "addAlbum": //Modo de uso: node main.js addAlbum artistId albumName year month day
-      let creationDate = new Date(args[5], args[6], args[7])
-      let albumData = {name: args[4], date: creationDate}
+    case "addAlbum": //Modo de uso: node main.js addAlbum artistId albumName year
+      let albumData = {name: args[4], year: args[5]}
       addAlbum(args[3], albumData)
       break
     case "addTrack": //Modo de uso: node main.js addTrack albumId trackName trackDuration trackGenre1 trackGenre2 trackGenre3
@@ -108,10 +107,8 @@ function main() {
       console.log(getAlbumById(args[3]))
       break
     case "getTrackById":
-      //No funca
-      //console.log(getTrackById(args[3]))
-      //break
-            //Llamar a la funcion del caso.
+      console.log(getTrackById(args[3]))
+      break
     case "getPlaylistById":
       //Llamar a la funcion del caso.
     case "getTracksMatchingGenres":
