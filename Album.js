@@ -4,15 +4,15 @@ class Album{
         this._id = id
         this._year = year
         this._artist = artist
-        this._tracks = new Set()
+        this._tracks = []
     }
 
     addTrack(track){
-        this._tracks.add(track)
+        this._tracks.unshift(track)
     }
 
     removeTrack(track){
-        this._tracks.delete(track)
+        this._tracks.splice(this._tracks.indexOf(track), 1)
     }
 
     get name(){return this._name}

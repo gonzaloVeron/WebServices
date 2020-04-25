@@ -41,10 +41,9 @@ class UNQfy {
   // retorna: el nuevo album creado
   addAlbum(artistId, albumData) {
     let artistFinded = this.artists.find(a => a.id == artistId)
-    let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.date, artistFinded)
+    let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded)
     this.nextAlbumId = this.nextAlbumId + 1
     artistFinded.addAlbum(newAlbum)
-    console.log(newAlbum)
     return newAlbum
   }
 
@@ -59,7 +58,6 @@ class UNQfy {
     let newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration)
     this.nextTrackId = this.nextTrackId + 1
     albumFinded.addTrack(newTrack)
-    console.log(newTrack)
     return newTrack
   /* Crea un track y lo agrega al album con id albumId.
   El objeto track creado debe tener (al menos):
@@ -78,7 +76,7 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    //return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id == id)
+    return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id == id)
   }
 
   getPlaylistById(id) {
