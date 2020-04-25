@@ -6,7 +6,7 @@ const Playlist = require('./playlist')
 const Track = require('./track')
 const Artist = require('./artist')
 const Album = require('./album')
-const InvalidCommandException = require('./invalidCommandException')
+const InvalidCommandException = require('../../../Downloads/WebServices/invalidCommandException')
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {
@@ -52,19 +52,19 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 */
 
 function addArtist(artistData){
-  let unquify = getUNQfy()
+  const unquify = getUNQfy()
   unquify.addArtist(artistData)
   saveUNQfy(unquify)
 }
 
 function addAlbum(artistId, albumData){
-  let unquify = getUNQfy()
+  const unquify = getUNQfy()
   unquify.addAlbum(artistId, albumData)
   saveUNQfy(unquify)
 }
 
 function addTrack(albumId, trackData){
-  let unquify = getUNQfy()
+  const unquify = getUNQfy()
   unquify.addTrack(albumId, trackData)
   saveUNQfy(unquify)
 }
@@ -81,10 +81,16 @@ function getTrackById(id) {
   return getUNQfy().getTrackById(id)
 }
 
+function removeArtist(id){
+  const unquify = getUNQfy()
+  unquify.removeArtist(id)
+  saveUNQfy(unquify)
+}
+
 function main() {
   //console.log('arguments: ');
   //let args2 = process.argv.forEach(argument => console.log(argument));
-  let args = process.argv
+  const args = process.argv
 
   switch(args[2]){
     case "addArtist": //Modo de uso: node main.js addArtist artistName artistCountry
@@ -117,6 +123,9 @@ function main() {
       //Llamar a la funcion del caso.
     case "createPlaylist":
       //Llamar a la funcion del caso.
+    case "removeArtist":
+      console.log(removeArtist(args[3]))
+      break
     default:
       throw new InvalidCommandException("El comando " + args[2] + " no existe")
   }

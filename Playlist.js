@@ -1,28 +1,33 @@
 class Playlist{
-    constructor(name){
+    constructor(name, genres, maxDuration){
         this._name = name
-        this._tracks = new Set()
-        this._genres = new Set()
+        this._tracks = []
+        this._genres = genres
+        this._maxDuration = maxDuration
     }
 
     hasTrack(st){
-        return this._tracks.has(st)
+        return this._tracks.some(t => t.name === st)
     }
 
     addGenre(genre){
-        this._genres.add(genre)
+        this._genres.unshift(genre)
     }
 
-    addTrack(track){
-        this._tracks.add(track)
+    addTrack(track){ //revisar la duracion
+        this._tracks.unshift(track)
     }
 
-    calculateDuration(){
-        let dur = 0
-        this._tracks.forEach(t => {
-            dur += t.duration
-        })
-        return dur
+    removeTracks(tracks){
+        tracks.forEach(t => this.removeTrack(t))
+    }
+
+    removeTrack(track){
+        this._tracks.splice(this._tracks.indexOf(track), 1)
+    }
+
+    duration(){
+        return this._tracks.reduce((acum, actual) => acum + actual.duration, 0)
     }
 
     get name(){return this._name}

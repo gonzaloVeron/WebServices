@@ -4,8 +4,8 @@ const assert = require('chai').assert;
 const libunqfy = require('./unqfy');
 
 
-function createAndAddArtist(unqfy, artistName, countryName) {
-  const artist = unqfy.addArtist({ name: artistName, country: countryName });
+function createAndAddArtist(unqfy, artistName, country) {
+  const artist = unqfy.addArtist({ name: artistName, country: country });
   return artist;
 }
 
@@ -60,6 +60,7 @@ describe('Add, remove and filter data', () => {
     const playlist = unqfy.createPlaylist('Roses playlist', ['pop'], 1400);
 
     const results = unqfy.searchByName('Roses');
+
     assert.deepEqual(results, {
       artists: [artist1],
       albums: [album1],
@@ -106,7 +107,7 @@ describe('Add, remove and filter data', () => {
     createAndAddTrack(unqfy, album3.id, 'Another song', 500, ['classic']);
     createAndAddTrack(unqfy, album3.id, 'Another song II', 500, ['movie']);
 
-    const matchingTracks = unqfy.getTracksMatchingArtist(artist);
+    const matchingTracks = unqfy.getTracksMatchingArtist(artist.name);
 
     assert.isArray(matchingTracks);
     assert.lengthOf(matchingTracks, 3);

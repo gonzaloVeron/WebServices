@@ -9,6 +9,7 @@ const Album = require('./album')
 class UNQfy {
   constructor(){
     this._artists = []
+    this._playLists = []
     this._nextArtistId = 0
     this._nextAlbumId = 0
     this._nextTrackId = 0
@@ -18,6 +19,7 @@ class UNQfy {
   get nextAlbumId(){return this._nextAlbumId}
   get nextTrackId(){return this._nextTrackId}
   get artists(){return this._artists}
+  get playLists(){return this._playLists}
 
   set nextArtistId(value){return this._nextArtistId = value}
   set nextAlbumId(value){return this._nextAlbumId = value}
@@ -67,6 +69,43 @@ class UNQfy {
   */
   }
 
+  removeArtist(artistId){
+    const artist = this.getArtistById(artistId)
+    this.playLists.removeTracks(artist.albums.map(a => a.tracks).flat())
+    this.artists.splice(this.artists.indexOf(artist.id), 1)
+  }
+
+  removeAlbum(albumId){
+    const album = this.getAlbumById(albumId)
+    this.playLists.removeTracks(album.tracks)
+    album.artist.removeAlbum(album)
+  }
+
+  removeTrack(trackId){
+    const track = this.getTrackById(trackId)
+    this.playLists.removeTrack(track)
+    track.album.removeTrack(track)
+  }
+
+  removePlayList(playListName){
+    const playList = this.playLists.find(p => p.name === playListName)
+    this.playLists.splice(this.playLists.indexOf(playList), 1)
+  }
+
+  //Devuelve un objeto con 4 listas
+  searchByName(st){
+    const playlists = this.playLists.filter(p => p.name.includes(st))
+    const artists = this.artists.filter(a => a.name.includes(st))
+    const albums = this.artists.map(a => a.albums).flat().filter(a => a.name.includes(st))
+    const tracks = this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().filter(t => t.name.includes(st))
+    return {
+      artists: artists,
+      albums: albums,
+      tracks: tracks,
+      playlists: playlists,
+    }
+  }
+
   getArtistById(id) {
     return this.artists.find(a => a.id == id)
   }
@@ -85,14 +124,14 @@ class UNQfy {
 
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
-  getTracksMatchingGenres(genres) {
-
+  getTracksMatchingGenres(genress) {
+    return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().filter(t => t.genres.some(g => genress.includes(g)))
   }
 
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
-
+    return this.artists.find(a => a.name === artistName).albums.map(a => a.tracks).flat()
   }
 
 
@@ -107,7 +146,9 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
-
+    const newPlaylist = new Playlist(name, genresToInclude, maxDuration)
+    this.playLists.unshift(newPlaylist)
+    return newPlaylist
   }
 
   save(filename) {
