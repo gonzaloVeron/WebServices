@@ -41,7 +41,7 @@ class UNQfy {
   // retorna: el nuevo album creado
   addAlbum(artistId, albumData) {
     let artistFinded = this.artists.find(a => a.id == artistId)
-    let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.date, artistFinded)
+    let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded)
     this.nextAlbumId = this.nextAlbumId + 1
     artistFinded.addAlbum(newAlbum)
     console.log(newAlbum)
