@@ -5,6 +5,7 @@ const Playlist = require('./playlist')
 const Track = require('./track')
 const Artist = require('./artist')
 const Album = require('./album')
+const ExistException = require('./existException')
 
 class UNQfy {
   constructor(){
@@ -30,6 +31,9 @@ class UNQfy {
   //   artistData.country (string)
   // retorna: el nuevo artista creado
   addArtist(artistData) {
+    if(this.artists.some(a => a.name === artistData.name)){
+      throw new ExistException("Ya existe un artista con: "+artistData.name)
+    }
     let newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country)
     this.artists.unshift(newArtist)
     this.nextArtistId = this._nextArtistId + 1
@@ -57,6 +61,9 @@ class UNQfy {
   // retorna: el nuevo track creado
   addTrack(albumId, trackData) {
     let albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id == albumId)
+    if(albumFinded.tracks.some(t => t.name === trackData.name)){
+      throw new ExistException("Ya existe un track con: "+trackData.name)
+    }
     let newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration)
     this.nextTrackId = this.nextTrackId + 1
     albumFinded.addTrack(newTrack)
