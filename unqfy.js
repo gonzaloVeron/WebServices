@@ -146,7 +146,9 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
+    const tracks = this.getTracksMatchingGenres(genresToInclude)
     const newPlaylist = new Playlist(name, genresToInclude, maxDuration)
+    tracks.forEach(t => newPlaylist.addTrack(t))
     this.playLists.unshift(newPlaylist)
     return newPlaylist
   }
