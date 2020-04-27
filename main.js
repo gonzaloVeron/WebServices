@@ -2,7 +2,6 @@
 
 const fs = require('fs'); // necesitado para guardar/cargar unqfy
 const unqmod = require('./unqfy'); // importamos el modulo unqfy
-const InvalidCommandException = require('./invalidCommandException');
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {
@@ -148,7 +147,7 @@ const commands = {
 };
 
 function main() {
-  if(commands[process.argv[2]] != null){
+  if(commands[process.argv[2]] !== null){
     commands[process.argv[2]](process.argv.slice(3, process.argv.length));
   } else {
     console.log('El comando ' + process.argv[2] + ' no existe');
