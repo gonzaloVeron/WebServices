@@ -70,15 +70,15 @@ function addTrack(albumId, trackData){
 }
 
 function getArtistById(id) {
-  return getUNQfy().getArtistById(id)
+   console.log(getUNQfy().getArtistById(id))
 }
 
 function getAlbumById(id) {
-  return getUNQfy().getAlbumById(id)
+  console.log(getUNQfy().getAlbumById(id))
 }
 
 function getTrackById(id) {
-  return getUNQfy().getTrackById(id)
+  console.log(getUNQfy().getTrackById(id))
 }
 
 function removeArtist(id){
@@ -87,11 +87,70 @@ function removeArtist(id){
   saveUNQfy(unquify)
 }
 
+function removeAlbum(albumId){
+  const unquify = getUNQfy()
+  unquify.removeAlbum(albumId)
+  saveUNQfy(unquify)
+}
+function removeTrack(trackId){
+  const unquify = getUNQfy()
+  unquify.removeTrack(trackId)
+  saveUNQfy(unquify)
+}
+function removePlayList(playListName){ // o id
+  const unquify = getUNQfy()
+  unquify.removePlayList(playListName)
+  saveUNQfy(unquify)
+}
+function searchByName(st){
+  const unquify = getUNQfy()
+  unquify.searchByName(st)
+  saveUNQfy(unquify)
+}
+function getTracksMatchingGenres(genres){
+  const unquify = getUNQfy()
+  unquify.getTracksMatchingGenres(genres)
+  saveUNQfy(unquify)
+}
+function getTracksMatchingArtist(artistName){
+  const unquify = getUNQfy()
+  unquify.getTracksMatchingArtist(artistName)
+  saveUNQfy(unquify)
+}
+function createPlaylist(name, maxDuration, genresToInclude) {
+  const unquify = getUNQfy()
+  unquify.createPlaylist(name, maxDuration, genresToInclude)
+  saveUNQfy(unquify)
+}
+
+const commands = {
+  "addArtist" : args => addArtist({name : args[0], country : args[1]}),
+  "addAlbum" : args => addAlbum(args[0],{name : args[1], year : args[2]}),
+  "addTrack": args => addTrack(args[0], {name : args[1], duration : args[2], genres : args.slice(3, args.length)}), 
+  "getArtistById" : args => getArtistById(args[0]),
+  "getAlbumById" : args => getAlbumById(args[0]),
+  "getTrackById" : args => getTrackById(args[0]),
+  "getTracksMatchingGenres" : args => getTracksMatchingGenres(args),
+  "getTracksMatchingArtist" : args => getTracksMatchingArtist(args[0]),
+  "createPlaylist" : args => createPlaylist(args[0], args[1], args.slice(3, args.length)),
+  "removeArtist" : args => removeArtist(args[0]),
+  "removeAlbum" : args => removeAlbum(args[0]),
+  "removeTrack" : args => removeTrack(args[0]),
+  "removePlayList" : args => removePlayList(args[0]),
+  "searchByName" : args => searchByName(args[0])
+}
+
 function main() {
   //console.log('arguments: ');
   //let args2 = process.argv.forEach(argument => console.log(argument));
-  const args = process.argv
 
+  try{
+    commands[process.argv[2]](process.argv.slice(3, process.argv.length))
+  }catch(e){
+    throw new InvalidCommandException("El comando " + process.argv[2] + " no existe")
+  }
+
+  /*
   switch(args[2]){
     case "addArtist": //Modo de uso: node main.js addArtist artistName artistCountry
       let artistData = {name: args[3], country: args[4]}
@@ -127,8 +186,8 @@ function main() {
       console.log(removeArtist(args[3]))
       break
     default:
-      throw new InvalidCommandException("El comando " + args[2] + " no existe")
-  }
+      
+  }*/
 }
 
 

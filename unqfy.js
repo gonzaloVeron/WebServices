@@ -6,6 +6,7 @@ const Track = require('./track')
 const Artist = require('./artist')
 const Album = require('./album')
 const ExistException = require('./existException')
+const NonExistentArtistException = require('./nonExistentArtisException')
 
 class UNQfy {
   constructor(){
@@ -47,6 +48,9 @@ class UNQfy {
   // retorna: el nuevo album creado
   addAlbum(artistId, albumData) {
     let artistFinded = this.artists.find(a => a.id == artistId)
+    if(artistFinded === null){
+      throw NonExistentArtistException("No existe un artista con ID: "+artistId)
+    }
     let newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded)
     this.nextAlbumId = this.nextAlbumId + 1
     artistFinded.addAlbum(newAlbum)
@@ -146,7 +150,7 @@ class UNQfy {
   // genresToInclude: array de generos
   // maxDuration: duración en segundos
   // retorna: la nueva playlist creada
-  createPlaylist(name, genresToInclude, maxDuration) {
+  createPlaylist(name, maxDuration, genresToInclude) {
   /*** Crea una playlist y la agrega a unqfy. ***
     El objeto playlist creado debe soportar (al menos):
       * una propiedad name (string)
