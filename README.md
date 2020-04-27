@@ -34,3 +34,9 @@
 - songsHeard [id del usuario]
 - timesHeard [id del usuario] [id del track]
 - mosHeard [id del usuario] [id del artista]
+
+## Comandos de prueba
+
+- node main.js addArtist Gonza Argentina
+- node main.js addAlbum 0 Lorihen 2007
+- node main.js addTrack 0 VidaEterna 1500 Rock Metal Heavy
