@@ -43,19 +43,32 @@ function mostHeard(userId, artistId){
 
 function addArtist(artistData){
   const unquify = getUNQfy()
-  unquify.addArtist(artistData)
+  try{
+    unquify.addArtist(artistData)
+  } catch(e){
+    console.log(e.message)
+  }
+  
   saveUNQfy(unquify)
 }
 
 function addAlbum(artistId, albumData){
   const unquify = getUNQfy()
-  unquify.addAlbum(artistId, albumData)
+  try{
+    unquify.addAlbum(artistId, albumData)
+  } catch(e){
+    console.log(e.message)
+  }
   saveUNQfy(unquify)
 }
 
 function addTrack(albumId, trackData){
   const unquify = getUNQfy()
-  unquify.addTrack(albumId, trackData)
+  try{
+    unquify.addTrack(albumId, trackData)
+  } catch(e){
+    console.log(e.message)
+  }
   saveUNQfy(unquify)
 }
 
@@ -91,9 +104,9 @@ function removeTrack(trackId){
   unquify.removeTrack(trackId)
   saveUNQfy(unquify)
 }
-function removePlayList(playListName){ // o id
+function removePlayList(playListId){ 
   const unquify = getUNQfy()
-  unquify.removePlayList(playListName)
+  unquify.removePlayList(playListId)
   saveUNQfy(unquify)
 }
 function searchByName(st){
@@ -135,10 +148,10 @@ const commands = {
 }
 
 function main() {
-  try{
+  if(commands[process.argv[2]] != null){
     commands[process.argv[2]](process.argv.slice(3, process.argv.length))
-  }catch(e){
-    throw new InvalidCommandException("El comando " + process.argv[2] + " no existe")
+  } else {
+   console.log("El comando " + process.argv[2] + " no existe")
   }
 }
 

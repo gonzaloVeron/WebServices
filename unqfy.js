@@ -7,7 +7,7 @@ const Artist = require('./artist')
 const Album = require('./album')
 const ExistException = require('./existException')
 const NonExistentArtistException = require('./nonExistentArtisException')
-const User = requiser('./user')
+const User = require('./user')
 
 class UNQfy {
   constructor(){
@@ -57,7 +57,7 @@ class UNQfy {
 
   addArtist(artistData) {
     if(this.artists.some(a => a.name === artistData.name)){
-      throw new ExistException("Ya existe un artista con: " + artistData.name)
+      throw new ExistException("Ya existe un artista con nombre: " + artistData.name)
     }
     let newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country)
     this.artists.unshift(newArtist)
@@ -79,7 +79,7 @@ class UNQfy {
   addTrack(albumId, trackData) {
     const albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id == albumId)
     if(albumFinded.tracks.some(t => t.name === trackData.name)){
-      throw new ExistException("Ya existe un track con: " + trackData.name)
+      throw new ExistException("Ya existe un track con nombre: " + trackData.name)
     }
     const newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration)
     this.nextTrackId = this.nextTrackId + 1
@@ -105,8 +105,8 @@ class UNQfy {
     track.album.removeTrack(track)
   }
 
-  removePlayList(playListName){
-    const playList = this.playLists.find(p => p.name === playListName)
+  removePlayList(playListId){
+    const playList = this.playLists.find(p => p.id === playListId)
     this.playLists.splice(this.playLists.indexOf(playList), 1)
   }
 
