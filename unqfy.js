@@ -147,7 +147,7 @@ class UNQfy {
     return this.artists.find(a => a.name === artistName).albums.map(a => a.tracks).flat();
   }
 
-  createPlaylist(name, maxDuration, genresToInclude) {
+  createPlaylist(name, genresToInclude, maxDuration) {
     const tracks = this.getTracksMatchingGenres(genresToInclude);
     const newPlaylist = new Playlist(this.nextPlaylistId, name, genresToInclude, maxDuration);
     this.nextPlaylistId = this.nextPlaylistId + 1;

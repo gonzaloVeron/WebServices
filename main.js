@@ -123,9 +123,9 @@ function getTracksMatchingArtist(artistName){
   return console.log(getUNQfy().getTracksMatchingArtist(artistName));
 }
 
-function createPlaylist(name, maxDuration, genresToInclude) {
+function createPlaylist(name, genresToInclude, maxDuration) {
   const unquify = getUNQfy();
-  unquify.createPlaylist(name, maxDuration, genresToInclude);
+  unquify.createPlaylist(name, genresToInclude, maxDuration);
   saveUNQfy(unquify);
 }
 
@@ -144,7 +144,7 @@ const commands = {
   getPlaylistById : args => getPlaylistById(args[0]),
   getTracksMatchingGenres : args => getTracksMatchingGenres(args),
   getTracksMatchingArtist : args => getTracksMatchingArtist(args[0]),
-  createPlaylist : args => createPlaylist(args[0], args[1], args.slice(3, args.length)),
+  createPlaylist : args => createPlaylist(args[0], args.slice(3, args.length), args[1]),
   removeArtist : args => removeArtist(args[0]),
   removeAlbum : args => removeAlbum(args[0]),
   removeTrack : args => removeTrack(args[0]),
