@@ -6,7 +6,7 @@
 | Nombre y Apellido              |      Mail                      |     usuario Gitlab   |
 | -----------------------------  | ------------------------------ | -------------------  |
 | Gonzalo Verón                  | gonveron96@gmail.com           |  gonzaloVeron        |
-| Ignacio Mendez                 |                                |  mendezigna          |
+| Ignacio Mendez                 | ignacio.mendez0000@gmail.com   |  mendezigna          |
 
 ## Diagrama UML
 
