@@ -1,7 +1,7 @@
 class ExistException extends Error{
-    constructor(message){
-        super(message)
-    }
+  constructor(message){
+    super(message);
+  }
 }
 
-module.exports = ExistException
+module.exports = ExistException;
