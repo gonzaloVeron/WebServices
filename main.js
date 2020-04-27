@@ -87,9 +87,9 @@ function getPlaylistById(id){
   console.log(getUNQfy().getPlaylistById(id));
 }
 
-function removeArtist(id){
+function removeArtist(artistId){
   const unquify = getUNQfy();
-  unquify.removeArtist(id);
+  unquify.removeArtist(artistId);
   saveUNQfy(unquify);
 }
 
@@ -98,25 +98,31 @@ function removeAlbum(albumId){
   unquify.removeAlbum(albumId);
   saveUNQfy(unquify);
 }
+
 function removeTrack(trackId){
   const unquify = getUNQfy();
   unquify.removeTrack(trackId);
   saveUNQfy(unquify);
 }
+
 function removePlayList(playListId){ 
   const unquify = getUNQfy();
   unquify.removePlayList(playListId);
   saveUNQfy(unquify);
 }
+
 function searchByName(st){
   console.log(getUNQfy().searchByName(st));
 }
+
 function getTracksMatchingGenres(genres){
   return console.log(getUNQfy().getTracksMatchingGenres(genres));
 }
+
 function getTracksMatchingArtist(artistName){
   return console.log(getUNQfy().getTracksMatchingArtist(artistName));
 }
+
 function createPlaylist(name, maxDuration, genresToInclude) {
   const unquify = getUNQfy();
   unquify.createPlaylist(name, maxDuration, genresToInclude);
@@ -138,7 +144,7 @@ const commands = {
   getPlaylistById : args => getPlaylistById(args[0]),
   getTracksMatchingGenres : args => getTracksMatchingGenres(args),
   getTracksMatchingArtist : args => getTracksMatchingArtist(args[0]),
-  createPlaylist : args => createPlaylist(args[0], args.slice(3, args.length), args[1]),
+  createPlaylist : args => createPlaylist(args[0], args[1], args.slice(3, args.length)),
   removeArtist : args => removeArtist(args[0]),
   removeAlbum : args => removeAlbum(args[0]),
   removeTrack : args => removeTrack(args[0]),
