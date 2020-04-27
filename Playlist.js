@@ -1,5 +1,6 @@
 class Playlist{
-    constructor(name, genres, maxDuration){
+    constructor(id, name, genres, maxDuration){
+        this._id = id
         this._name = name
         this._tracks = []
         this._genres = genres
@@ -14,7 +15,7 @@ class Playlist{
         this._genres.unshift(genre)
     }
 
-    addTrack(track){ //revisar la duracion
+    addTrack(track){
         if(track.duration < this.maxDuration){
             this._tracks.unshift(track)
         }
@@ -30,9 +31,9 @@ class Playlist{
 
     duration(){
         return this._maxDuration
-        //return this._tracks.reduce((acum, actual) => acum + actual.duration, 0)
     }
 
+    get id(){return this._id}
     get name(){return this._name}
     get tracks(){return this._tracks}
     get genres(){return this._genres}
