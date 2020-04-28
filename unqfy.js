@@ -66,9 +66,9 @@ class UNQfy {
   }
 
   addAlbum(artistId, albumData) {
-    const artistFinded = this.artists.find(a => a.id == artistId);
-    if(artistFinded === null){
-      throw NonExistentArtistException('No existe un artista con ID: ' + artistId);
+    const artistFinded = this.artists.find(a => a.id === artistId);
+    if(artistFinded === undefined){
+      throw new NonExistentArtistException('No existe un artista con ID: ' + artistId);
     }
     const newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded);
     this.nextAlbumId = this.nextAlbumId + 1;
