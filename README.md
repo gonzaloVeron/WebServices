@@ -17,7 +17,7 @@
 - addArtist [nombre del artista] [pais del artista]
 - addAlbum [id del artista] [nombre del album] [año de creacion del album]
 - addTrack [id del album] [nombre del track] [duracion del track] [generos del track]
-- createPlaylist [nombre de playlist] [duracion maxima] [generos de la playlist]
+- createPlaylist [nombre de playlist] [generos de la playlist] [duracion maxima]
 - removeArtist [id del artista]
 - removeAlbum [id del album]
 - removeTrack [id del track]
