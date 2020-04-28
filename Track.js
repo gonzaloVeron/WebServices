@@ -11,7 +11,7 @@ class Track{
   get name(){return this._name;}
   get id(){return this._id;}
   get album(){return this._album;}
-  get artist(){return this._artists;}
+  get artist(){return this._artist;}
   get genres(){return this._genres;}
   get duration(){return this._duration;}
 }

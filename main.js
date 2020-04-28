@@ -129,7 +129,12 @@ function createPlaylist(name, genresToInclude, maxDuration) {
   saveUNQfy(unquify);
 }
 
+function getUserById(userId){
+  console.log(getUNQfy().getUserById(userId))
+}
+
 const commands = {
+  getUserById : args => getUserById(args[0]),
   mostHeard : args => mostHeard(args[0], args[1]),
   timesHeard : args => timesHeard(args[0], args[1]),
   songsHeard : args => songsHeard(args[0]),

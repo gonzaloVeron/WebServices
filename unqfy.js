@@ -38,13 +38,13 @@ class UNQfy {
 
   addUser(userName){
     const newUser = new User(this.nextUserId, userName);
-    this._users.unshift(newUser);
+    this.users.unshift(newUser);
     this.nextUserId = this.nextUserId + 1;
     return newUser;
   }
 
   hear(userId, trackId){
-    this.getUserById(userId).head(this.getTrackById(trackId));
+    this.getUserById(userId).hear(this.getTrackById(trackId));
   }
 
   timesHeard(userId, trackId){
@@ -120,7 +120,7 @@ class UNQfy {
   }
 
   getUserById(id){
-    return this.users.find(u => u.id === id);
+    return this.users.find(u => u.id == id);
   }
 
   getArtistById(id) {
@@ -136,7 +136,7 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-    return this.playLists.find(p => p._id === id);
+    return this.playLists.find(p => p._id == id);
   }
 
   getTracksMatchingGenres(genress) {
@@ -169,7 +169,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Album, Track, Playlist];
+    const classes = [UNQfy, Artist, Album, Track, Playlist, User];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 

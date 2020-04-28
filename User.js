@@ -7,9 +7,9 @@ class User{
 
   hear(track){
     if(this.songsHeard.map(obj => obj.trackName).includes(track.name)){
-      this.songsHeard.find(obj => obj.trackName).timesHeard++;
+      this.songsHeard.find(obj => obj.trackName == track.name).timesHeard++;
     }else{
-      this.songsHeard.unshift({trackName: track.name, artistName: track.artist, timesHeard: 1});
+      this.songsHeard.unshift({trackName: track.name, artistName: track.artist.name, timesHeard: 1});
     }
   }
 
@@ -22,7 +22,7 @@ class User{
   }
 
   mostHeard(artistName){
-    return this.songsHeard.sort((x, y) => y.timesHeard - x.timesHeard).filter(obj => obj.artist === artistName).slice(0, 3);
+    return this.songsHeard.sort((x, y) => y.timesHeard - x.timesHeard).filter(obj => obj.artistName === artistName).slice(0, 3);
   }
 
   get id(){return this._id;}
