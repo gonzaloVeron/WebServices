@@ -158,7 +158,7 @@ const commands = {
 };
 
 function main() {
-  if(commands[process.argv[2]] !== null){
+  if(commands[process.argv[2]] !== undefined){
     commands[process.argv[2]](process.argv.slice(3, process.argv.length));
   } else {
     console.log('El comando ' + process.argv[2] + ' no existe');
