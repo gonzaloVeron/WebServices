@@ -77,7 +77,7 @@ class UNQfy {
   }
 
   addTrack(albumId, trackData) {
-    const albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id == albumId);
+    const albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id === albumId);
     if(albumFinded.tracks.some(t => t.name === trackData.name)){
       throw new ExistException('Ya existe un track con nombre: ' + trackData.name);
     }
@@ -120,23 +120,23 @@ class UNQfy {
   }
 
   getUserById(id){
-    return this.users.find(u => u.id == id);
+    return this.users.find(u => u.id === id);
   }
 
   getArtistById(id) {
-    return this.artists.find(a => a.id == id);
+    return this.artists.find(a => a.id === id);
   }
 
   getAlbumById(id) {
-    return this.artists.map(a => a.albums).flat().find(a => a.id == id);
+    return this.artists.map(a => a.albums).flat().find(a => a.id === id);
   }
 
   getTrackById(id) {
-    return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id == id);
+    return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id === id);
   }
 
   getPlaylistById(id) {
-    return this.playLists.find(p => p._id == id);
+    return this.playLists.find(p => p._id === id);
   }
 
   getTracksMatchingGenres(genress) {
