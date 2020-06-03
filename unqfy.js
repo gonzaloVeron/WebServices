@@ -8,6 +8,8 @@ const Album = require('./album');
 const ExistException = require('./existException');
 const NonExistentArtistException = require('./nonExistentArtisException');
 const User = require('./user');
+const rp = require('request-promise');
+const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
 
 class UNQfy {
   constructor(){
@@ -119,6 +121,10 @@ class UNQfy {
     };
   }
 
+  getArtisByName(artistName){
+    return this.artists.find(a => a.name === artistName);
+  }
+
   getUserById(id){
     return this.users.find(u => u.id === id);
   }
@@ -132,7 +138,7 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().find(t => t.id === id);
+    return this.artists.flatMap(a => a.tracks()).find(t => t.id === id);
   }
 
   getPlaylistById(id) {
@@ -144,7 +150,43 @@ class UNQfy {
   }
 
   getTracksMatchingArtist(artistName) {
-    return this.artists.find(a => a.name === artistName).albums.map(a => a.tracks).flat();
+    return this.getArtisByName(artistName).albums.map(a => a.tracks).flat();
+  }
+
+  getAlbumsForArtist(artistName){
+    return this.getArtisByName(artistName).albums.map(a => a.name);
+  }
+
+  searchArtistInSpotify(artistName){
+    const options = {
+      url: 'https://api.spotify.com/v1/search',
+      headers: { Authorization: 'Bearer ' + ACCESS_TOKEN },
+      qs: {
+        q:artistName,
+        type:'artist',
+      },
+      json: true,
+    };
+    return rp.get(options).then(response => {
+      return response.artists.items[0];
+    });
+  }
+
+  populateAlbumsForArtist(artistName){
+    return this.searchArtistInSpotify(artistName).then(artist => {
+      const options = {
+        url: `https://api.spotify.com/v1/artists/${artist.id}/albums`,
+        headers: { Authorization: 'Bearer ' + ACCESS_TOKEN },
+        json: true,
+      };
+      return rp.get(options).then(response => {
+        const artistId = this.getArtisByName(artistName).id;
+        response.items.forEach(i => {
+          const albumData = {name: i.name, year: i.release_date.slice(0, 4)};
+          this.addAlbum(artistId, albumData);
+        });
+      });
+    }).catch(err => console.log('Algo malio sal'));
   }
 
   createPlaylist(name, genresToInclude, maxDuration) {

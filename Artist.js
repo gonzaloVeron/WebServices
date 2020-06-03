@@ -11,7 +11,11 @@ class Artist{
   }
 
   removeAlbum(album){
-    this._albums.splice(this._albums.indexOf(album), 1); //Probar
+    this._albums.splice(this._albums.indexOf(album), 1);
+  }
+
+  tracks(){
+    return this._albums.flatMap(a => a.tracks);
   }
 
   get name(){return this._name;}

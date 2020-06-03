@@ -133,6 +133,17 @@ function getUserById(userId){
   console.log(getUNQfy().getUserById(userId))
 }
 
+/* --- */
+
+function getAlbumsForArtist(artistName){
+  console.log(getUNQfy().getAlbumsForArtist(artistName)); 
+}
+
+function populateAlbumsForArtist(artistName){
+  const unquify = getUNQfy();
+  unquify.populateAlbumsForArtist(artistName).then(() => saveUNQfy(unquify));
+}
+
 const commands = {
   getUserById : args => getUserById(parseInt(args[0])),
   mostHeard : args => mostHeard(parseInt(args[0]), parseInt(args[1])),
@@ -154,7 +165,9 @@ const commands = {
   removeAlbum : args => removeAlbum(parseInt(args[0])),
   removeTrack : args => removeTrack(parseInt(args[0])),
   removePlayList : args => removePlayList(parseInt(args[0])),
-  searchByName : args => searchByName(args[0])
+  searchByName : args => searchByName(args[0]),
+  getAlbumsForArtist : args => getAlbumsForArtist(args[0]),
+  populateAlbumsForArtist : args => populateAlbumsForArtist(args[0]),
 };
 
 function main() {

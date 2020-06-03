@@ -1,3 +1,5 @@
+const rp = require('request-promise');
+
 class Track{
   constructor(name, id, album, artist, genres, duration){
     this._name = name;
@@ -6,6 +8,7 @@ class Track{
     this._artist = artist;
     this._genres = genres;
     this._duration = duration;
+    this._lyrics = '';
   }
 
   get name(){return this._name;}
@@ -14,6 +17,7 @@ class Track{
   get artist(){return this._artist;}
   get genres(){return this._genres;}
   get duration(){return this._duration;}
+  
 }
 
 module.exports = Track;
