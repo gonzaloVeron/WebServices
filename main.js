@@ -130,7 +130,7 @@ function createPlaylist(name, genresToInclude, maxDuration) {
 }
 
 function getUserById(userId){
-  console.log(getUNQfy().getUserById(userId))
+  console.log(getUNQfy().getUserById(userId));
 }
 
 /* --- */
@@ -142,6 +142,14 @@ function getAlbumsForArtist(artistName){
 function populateAlbumsForArtist(artistName){
   const unquify = getUNQfy();
   unquify.populateAlbumsForArtist(artistName).then(() => saveUNQfy(unquify));
+}
+
+function getTrackLyrics(trackId){
+  const unquify = getUNQfy();
+  unquify.getLyrics(trackId).then(lyr => {
+    saveUNQfy(unquify);
+    console.log(lyr);
+  });
 }
 
 const commands = {
@@ -168,6 +176,7 @@ const commands = {
   searchByName : args => searchByName(args[0]),
   getAlbumsForArtist : args => getAlbumsForArtist(args[0]),
   populateAlbumsForArtist : args => populateAlbumsForArtist(args[0]),
+  getTrackLyrics : args => getTrackLyrics(parseInt(args[0]))
 };
 
 function main() {

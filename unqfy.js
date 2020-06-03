@@ -157,6 +157,10 @@ class UNQfy {
     return this.getArtisByName(artistName).albums.map(a => a.name);
   }
 
+  getLyrics(trackId){
+    return this.getTrackById(trackId).getLyrics();
+  }
+
   searchArtistInSpotify(artistName){
     const options = {
       url: 'https://api.spotify.com/v1/search',
