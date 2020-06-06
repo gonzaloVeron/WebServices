@@ -1,9 +1,10 @@
 {
   "name": "unqfy",
   "version": "1.0.0",
-  "description": "",
+  "description": "| Nombre y Apellido              |      Mail                      |     Usuario Github   |\r | -----------------------------  | ------------------------------ | -------------------  |\r | Gonzalo Verón                  | gonveron96@gmail.com           |  gonzaloVeron        |\r | Ignacio Mendez                 | ignacio.mendez0000@gmail.com   |  mendezigna          |",
   "main": "main.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "chai": "^4.1.2",
     "express": "^4.17.1",
     "picklify": "github:lwoites/picklify",
@@ -18,8 +19,16 @@
   },
   "scripts": {
     "test": "mocha",
-    "eslint": "node_modules/.bin/eslint *.js"
+    "eslint": "eslint *.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonzaloVeron/WebServices.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gonzaloVeron/WebServices/issues"
+  },
+  "homepage": "https://github.com/gonzaloVeron/WebServices#readme"
 }

@@ -47,6 +47,13 @@ class Track {
     return this._lyrics;
   }
   
+  toJSON(){
+    return {
+      name: this.name,
+      lyrics: this.getLyrics()
+    };
+  }
+
 }
 
 module.exports = Track;

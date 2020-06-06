@@ -18,6 +18,15 @@ class Artist{
     return this._albums.flatMap(a => a.tracks);
   }
 
+  toJSON(){
+    return {
+      id: this.id,
+      name: this.name,
+      country: this.country,
+      albums: this.albums
+    };
+  }
+
   get name(){return this._name;}
   get id(){return this._id;}
   get country(){return this._country;}

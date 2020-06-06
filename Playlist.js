@@ -33,6 +33,21 @@ class Playlist{
     return this._maxDuration;
   }
 
+  toJSON(){
+    const duration = this.tracks.reduce((acc, elem) => acc + elem.duration, 0);
+    const json = {
+      id: this.id,
+      name: this.name,
+      duration : duration,
+      tracks: this.tracks.map(t => t.toJSON())
+    };
+    if (this.genres !== []){
+      json.genres = this.genres;
+    }
+    return json;
+
+  }
+
   get id(){return this._id;}
   get name(){return this._name;}
   get tracks(){return this._tracks;}

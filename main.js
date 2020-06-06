@@ -1,5 +1,3 @@
-
-
 const fs = require('fs'); // necesitado para guardar/cargar unqfy
 const unqmod = require('./unqfy'); // importamos el modulo unqfy
 
@@ -39,7 +37,6 @@ function timesHeard(userId, trackId){
 function mostHeard(userId, artistId){
   console.log(getUNQfy().mostHeard(userId, artistId));
 }
-
 function addArtist(artistData){
   const unquify = getUNQfy();
   try{

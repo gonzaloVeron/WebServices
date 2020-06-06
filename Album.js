@@ -15,6 +15,15 @@ class Album{
     this._tracks.splice(this._tracks.indexOf(track), 1);
   }
 
+  toJSON(){
+    return {
+      id: this.id(),
+      name: this.name,
+      year: this.year,
+      tracks: []
+    };
+  }
+
   get name(){return this._name;}
   get id(){return this._id;}
   get year(){return this._year;}

@@ -6,7 +6,7 @@ const Track = require('./track');
 const Artist = require('./artist');
 const Album = require('./album');
 const ExistException = require('./existException');
-const NonExistentArtistException = require('./nonExistentArtisException');
+const NonExistentException = require('./NonExistentException');
 const User = require('./user');
 const rp = require('request-promise');
 const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
@@ -67,10 +67,24 @@ class UNQfy {
     return newArtist;
   }
 
+  updateArtistById(id, artistData){
+    const artist = this.getArtistById(id);
+    const keys = Object.keys(artistData);
+    keys.forEach(k => artist[k] = artistData.k);
+    return artist;
+  }
+
+  updateAlbumById(id, albumData){
+    const album = this.getAlbumById(id);
+    const keys = Object.keys(albumData);
+    keys.forEach(k => album[k] = albumData.k);
+    return album;
+  }
+
   addAlbum(artistId, albumData) {
     const artistFinded = this.artists.find(a => a.id === artistId);
     if(artistFinded === undefined){
-      throw new NonExistentArtistException('No existe un artista con ID: ' + artistId);
+      throw new NonExistentException('No existe un artista con ID: ' + artistId);
     }
     const newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded);
     this.nextAlbumId = this.nextAlbumId + 1;
@@ -130,19 +144,35 @@ class UNQfy {
   }
 
   getArtistById(id) {
-    return this.artists.find(a => a.id === id);
+    const artist = this.artists.find(a => a.id === id);
+    if (artist === undefined){
+      throw new NonExistentException('No existe un artist con ID: ' + id); 
+    }
+    return artist;
   }
 
   getAlbumById(id) {
-    return this.artists.map(a => a.albums).flat().find(a => a.id === id);
+    const album = this.artists.map(a => a.albums).flat().find(a => a.id === id);
+    if (album === undefined){
+      throw new NonExistentException('No existe un album con ID: ' + id); 
+    }
+    return album;
   }
 
   getTrackById(id) {
-    return this.artists.flatMap(a => a.tracks()).find(t => t.id === id);
+    const track = this.artists.flatMap(a => a.tracks()).find(t => t.id === id);
+    if (track === undefined){
+      throw new NonExistentException('No existe un track con ID: ' + id); 
+    }
+    return track;
   }
 
   getPlaylistById(id) {
-    return this.playLists.find(p => p._id === id);
+    const playList = this.playLists.find(p => p._id === id);
+    if (playList === undefined){
+      throw new NonExistentException('No existe un playList con ID: ' + id); 
+    }
+    return playList;
   }
 
   getTracksMatchingGenres(genress) {
@@ -198,6 +228,16 @@ class UNQfy {
     const newPlaylist = new Playlist(this.nextPlaylistId, name, genresToInclude, maxDuration);
     this.nextPlaylistId = this.nextPlaylistId + 1;
     tracks.forEach(t => newPlaylist.addTrack(t));
+    this.playLists.unshift(newPlaylist);
+    return newPlaylist;
+  }
+
+  createPlaylistByIds(name, tracksids){
+    const tracks = tracksids.map(id => this.getTrackById(id));
+    const duracionMaxima = this.tracks.reduce((acc, elem) => Math.max(acc, elem.duration));
+    const newPlaylist = new Playlist(this.nextPlaylistId, name, [], duracionMaxima);
+    tracks.forEach(t => newPlaylist.addTrack(t));
+    this.nextPlaylistId = this.nextPlaylistId + 1;
     this.playLists.unshift(newPlaylist);
     return newPlaylist;
   }
