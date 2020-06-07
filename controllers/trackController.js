@@ -1,13 +1,13 @@
 const UnqfyController = require('./UnqfyController');
 
-class TrackController extends UnqfyController{
+class TrackController {
 
   getLyrics(req, res) {
-    const unqfy =  this.getUNQfy();
+    const unqfy =  UnqfyController.getUNQfy();
     try {
-      const track = unqfy.getTrackById(req.params.id);
+      const track = unqfy.getTrackById(parseInt(req.params.id));
       track.getLyrics().then( _ => {
-        this.saveUNQfy(unqfy);
+        UnqfyController.saveUNQfy(unqfy);
         res.status(200);
         res.json(track.toJSON());
       });
@@ -22,6 +22,4 @@ class TrackController extends UnqfyController{
 
 }
 
-module.exports = {
-  TrackController
-};
+module.exports = new TrackController();

@@ -12,12 +12,12 @@ class Playlist{
   }
 
   addGenre(genre){
-    this._genres.unshift(genre);
+    this._genres.push(genre);
   }
 
   addTrack(track){
     if(track.duration < this.maxDuration){
-      this._tracks.unshift(track);
+      this._tracks.push(track);
     }
   }
 

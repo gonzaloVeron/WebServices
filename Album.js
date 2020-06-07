@@ -8,7 +8,7 @@ class Album{
   }
 
   addTrack(track){
-    this._tracks.unshift(track); 
+    this._tracks.push(track); 
   } 
 
   removeTrack(track){
@@ -17,7 +17,7 @@ class Album{
 
   toJSON(){
     return {
-      id: this.id(),
+      id: this.id,
       name: this.name,
       year: this.year,
       tracks: []
@@ -29,6 +29,8 @@ class Album{
   get year(){return this._year;}
   get artist(){return this._artist;}
   get tracks(){return this._tracks;}
+  set name(value) {return this._name = value;}
+  set year(value) {return this._year = value;}
 }
 
 module.exports = Album;

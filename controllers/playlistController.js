@@ -1,12 +1,12 @@
 const UnqfyController = require('./UnqfyController');
 
-class PlaylistController extends UnqfyController{
+class PlaylistController {
 
   createPlaylist(req, res) {
-    const unqfy =  this.getUNQfy();
+    const unqfy =  UnqfyController.getUNQfy();
     try {
       const playList = unqfy.createPlaylist(req.body.name, req.body.genres, req.body.maxDuration);
-      this.saveUNQfy(unqfy);
+      UnqfyController.saveUNQfy(unqfy);
       res.status(201);
       res.json(playList.toJSON());
     } catch (err){
@@ -19,9 +19,9 @@ class PlaylistController extends UnqfyController{
   }
 
   getPlaylistById(req, res) {
-    const unqfy =  this.getUNQfy();
+    const unqfy =  UnqfyController.getUNQfy();
     try {
-      const playList = unqfy.getPlaylistById(req.params.id);
+      const playList = unqfy.getPlaylistById(parseInt(req.params.id));
       res.status(200);
       res.json(playList.toJSON());
     } catch (err){
@@ -34,10 +34,10 @@ class PlaylistController extends UnqfyController{
   }
 
   deletePlaylistById(req, res) {
-    const unqfy =  this.getUNQfy();
+    const unqfy =  UnqfyController.getUNQfy();
     try {
-      unqfy.removePlayList(req.params.id);
-      this.saveUNQfy(unqfy);
+      unqfy.removePlayList(parseInt(req.params.id));
+      UnqfyController.saveUNQfy(unqfy);
       res.status(204);
       res.json();
     } catch(err){
@@ -50,7 +50,7 @@ class PlaylistController extends UnqfyController{
   }
 
   searchPlaylist(req, res) {
-    const unqfy =  this.getUNQfy();
+    const unqfy =  UnqfyController.getUNQfy();
     let playLists = unqfy.playLists;
     const name = req.query.name;
     const durationLT = req.query.durationLT;
@@ -71,6 +71,4 @@ class PlaylistController extends UnqfyController{
   }
 
 }
-module.exports = {
-  PlaylistController
-};
+module.exports = new PlaylistController();

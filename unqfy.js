@@ -40,7 +40,7 @@ class UNQfy {
 
   addUser(userName){
     const newUser = new User(this.nextUserId, userName);
-    this.users.unshift(newUser);
+    this.users.push(newUser);
     this.nextUserId = this.nextUserId + 1;
     return newUser;
   }
@@ -62,7 +62,7 @@ class UNQfy {
       throw new ExistException('Ya existe un artista con nombre: ' + artistData.name);
     }
     const newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country);
-    this.artists.unshift(newArtist);
+    this.artists.push(newArtist);
     this.nextArtistId = this.nextArtistId + 1;
     return newArtist;
   }
@@ -70,14 +70,14 @@ class UNQfy {
   updateArtistById(id, artistData){
     const artist = this.getArtistById(id);
     const keys = Object.keys(artistData);
-    keys.forEach(k => artist[k] = artistData.k);
+    keys.forEach(k => artist[k] = artistData[k]);
     return artist;
   }
 
   updateAlbumById(id, albumData){
     const album = this.getAlbumById(id);
     const keys = Object.keys(albumData);
-    keys.forEach(k => album[k] = albumData.k);
+    keys.forEach(k => album[k] = albumData[k]);
     return album;
   }
 
@@ -87,8 +87,8 @@ class UNQfy {
       throw new NonExistentException('No existe un artista con ID: ' + artistId);
     }
     const newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded);
-    this.nextAlbumId = this.nextAlbumId + 1;
     artistFinded.addAlbum(newAlbum);
+    this.nextAlbumId = this.nextAlbumId + 1;
     return newAlbum;
   }
 
@@ -105,19 +105,19 @@ class UNQfy {
 
   removeArtist(artistId){
     const artist = this.getArtistById(artistId);
-    this.playLists.removeTracks(artist.albums.map(a => a.tracks).flat());
+    this.playLists.forEach(p => p.removeTracks(artist.albums.map(a => a.tracks).flat()));
     this.artists.splice(this.artists.indexOf(artist.id), 1);
   }
 
   removeAlbum(albumId){
     const album = this.getAlbumById(albumId);
-    this.playLists.removeTracks(album.tracks);
+    this.playLists.forEach(p => p.removeTracks(album.tracks));
     album.artist.removeAlbum(album);
   }
 
   removeTrack(trackId){
     const track = this.getTrackById(trackId);
-    this.playLists.removeTrack(track);
+    this.playLists.forEach(p => p.removeTrack(track));
     track.album.removeTrack(track);
   }
 
@@ -128,10 +128,10 @@ class UNQfy {
 
   searchByName(st){
     return {
-      artists: this.artists.filter(a => a.name.includes(st)),
-      albums: this.artists.map(a => a.albums).flat().filter(a => a.name.includes(st)),
-      tracks: this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().filter(t => t.name.includes(st)),
-      playlists: this.playLists.filter(p => p.name.includes(st))
+      artists: this.artists.filter(a => a.name.toLowerCase().includes(st.toLowerCase())),
+      albums: this.artists.map(a => a.albums).flat().filter(a => a.name.toLowerCase().includes(st.toLowerCase())),
+      tracks: this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().filter(t => t.name.toLowerCase().includes(st.toLowerCase())),
+      playlists: this.playLists.filter(p => p.name.toLowerCase().includes(st.toLowerCase()))
     };
   }
 
@@ -152,7 +152,7 @@ class UNQfy {
   }
 
   getAlbumById(id) {
-    const album = this.artists.map(a => a.albums).flat().find(a => a.id === id);
+    const album = this.artists.flatMap(a => a.albums).find(a => a.id === id);
     if (album === undefined){
       throw new NonExistentException('No existe un album con ID: ' + id); 
     }
@@ -175,6 +175,9 @@ class UNQfy {
     return playList;
   }
 
+  albums(){
+    return this.artists.flatMap(a => a.albums);
+  }
   getTracksMatchingGenres(genress) {
     return this.artists.map(a => a.albums).flat().map(a => a.tracks).flat().filter(t => t.genres.some(g => genress.includes(g)));
   }
@@ -228,7 +231,7 @@ class UNQfy {
     const newPlaylist = new Playlist(this.nextPlaylistId, name, genresToInclude, maxDuration);
     this.nextPlaylistId = this.nextPlaylistId + 1;
     tracks.forEach(t => newPlaylist.addTrack(t));
-    this.playLists.unshift(newPlaylist);
+    this.playLists.push(newPlaylist);
     return newPlaylist;
   }
 
@@ -238,7 +241,7 @@ class UNQfy {
     const newPlaylist = new Playlist(this.nextPlaylistId, name, [], duracionMaxima);
     tracks.forEach(t => newPlaylist.addTrack(t));
     this.nextPlaylistId = this.nextPlaylistId + 1;
-    this.playLists.unshift(newPlaylist);
+    this.playLists.push(newPlaylist);
     return newPlaylist;
   }
 

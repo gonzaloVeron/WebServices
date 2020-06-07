@@ -1,3 +1,5 @@
+const ExistException = require('./ExistException');
+
 class Artist{
   constructor(name, id, country){
     this._name = name;
@@ -7,7 +9,10 @@ class Artist{
   }
 
   addAlbum(album){
-    this._albums.unshift(album);
+    if(this.albums.some(a => a.name === album.name)){
+      throw new ExistException('Ya existe un album con nombre: '+ album.name);
+    }
+    this._albums.push(album);
   }
 
   removeAlbum(album){
@@ -31,6 +36,9 @@ class Artist{
   get id(){return this._id;}
   get country(){return this._country;}
   get albums(){return this._albums;}
+  set id(value){return this._id = value;}
+  set country(value){return this._country = value;}
+  set name(value){return this._name = value;}
 }
 
 module.exports = Artist;
