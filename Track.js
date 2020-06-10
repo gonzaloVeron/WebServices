@@ -50,7 +50,7 @@ class Track {
   toJSON(){
     return {
       name: this.name,
-      lyrics: this.getLyrics()
+      lyrics: this._lyrics
     };
   }
 

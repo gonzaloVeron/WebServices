@@ -1,4 +1,6 @@
 const UnqfyController = require('./UnqfyController');
+const errores = require('../Exceptions/APIError');
+const ExistException = require('../ExistException');
 
 class ArtistController {
 
@@ -23,11 +25,7 @@ class ArtistController {
       res.status(200);
       res.json(artist.toJSON());
     } catch(err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -40,11 +38,7 @@ class ArtistController {
       res.status(200);
       res.json(artist.toJSON());
     } catch(err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -56,11 +50,7 @@ class ArtistController {
       res.status(204);
       res.json();
     } catch(err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -72,13 +62,12 @@ class ArtistController {
       res.status(201);
       res.json(artist.toJSON());
     } catch (err){
-      res.status(409);
-      res.json({
-        status: 409,
-        errorCode: 'RESOURCE_ALREADY_EXISTS'
-      });
+      if(err instanceof ExistException){
+        throw new errores.ResourseAlreadyExists();
+      } else {
+        throw new errores.BadRequest(); 
+      }
     }
-    
   }
 
 }

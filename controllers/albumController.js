@@ -1,6 +1,7 @@
 const UnqfyController = require('./UnqfyController');
 const NonExistentException = require('../NonExistentException');
 const ExistException = require('../ExistException');
+const errores = require('../Exceptions/APIError');
 
 class AlbumController {
 
@@ -13,18 +14,12 @@ class AlbumController {
       res.json(album.toJSON());
     } catch (err) {
       if(err instanceof NonExistentException){
-        res.status(404);
-        res.json({
-          status: 404,
-          errorCode: 'RELATED_RESOURCE_NOT_FOUND'
-        });
+        throw new errores.RelatedResourceNotFound();
       } else if (err instanceof ExistException){
-        res.status(409);
-        res.json({
-          status:409,
-          errorCode: 'RESOURCE_ALREADY_EXISTS'
-        });
-      } 
+        throw new errores.ResourseAlreadyExists();
+      } else{
+        throw new errores.BadRequest();
+      }
     } 
     
   }
@@ -36,11 +31,7 @@ class AlbumController {
       res.status(200);
       res.json(album.toJSON());
     } catch (err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -52,11 +43,7 @@ class AlbumController {
       res.status(200);
       res.json(album.toJSON());
     } catch (err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -68,11 +55,7 @@ class AlbumController {
       res.status(204);
       res.json();
     } catch(err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
     
   }
@@ -91,4 +74,5 @@ class AlbumController {
   }
 
 }
+
 module.exports = new AlbumController();

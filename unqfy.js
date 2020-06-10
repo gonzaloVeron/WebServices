@@ -5,8 +5,9 @@ const Playlist = require('./playlist');
 const Track = require('./track');
 const Artist = require('./artist');
 const Album = require('./album');
-const ExistException = require('./existException');
+const ExistException = require('./ExistException');
 const NonExistentException = require('./NonExistentException');
+const MissingDataException = require('./MissingDataException');
 const User = require('./user');
 const rp = require('request-promise');
 const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
@@ -39,6 +40,8 @@ class UNQfy {
   set nextUserId(value){return this._nextUserId = value;}
 
   addUser(userName){
+    this.verifyValidName(userName);
+    this.verifyExitingName(userName);
     const newUser = new User(this.nextUserId, userName);
     this.users.push(newUser);
     this.nextUserId = this.nextUserId + 1;
@@ -46,18 +49,61 @@ class UNQfy {
   }
 
   hear(userId, trackId){
-    this.getUserById(userId).hear(this.getTrackById(trackId));
+    const userFinded = this.getUserById(userId);
+    const trackFinded = this.getTrackById(trackId);
+    if(userFinded === undefined || trackFinded === undefined){
+      throw new NonExistentException();
+    }
+    userFinded.hear(trackFinded);
   }
 
   timesHeard(userId, trackId){
-    return this.getUserById(userId).timesHeard(this.getTrackById(trackId).name);
+    const userFinded = this.getUserById(userId);
+    const trackFinded = this.getTrackById(trackId);
+    if(userFinded === undefined || trackFinded === undefined){
+      throw new NonExistentException();
+    }
+    return userFinded.timesHeard(trackFinded.name);
   }
 
   mostHeard(userId, artistId){
-    return this.getUserById(userId).mostHeard(this.getArtistById(artistId).name);
+    const userFinded = this.getUserById(userId);
+    const artistFinded = this.getArtistById(artistId);
+    if(userFinded === undefined || artistFinded === undefined){
+      throw new NonExistentException();
+    }
+    return userFinded.mostHeard(artistFinded.name);
+  }
+
+  removeUser(userId){
+    this.users.splice(this.users.indexOf(userId), 1);
+  }
+  
+  updateUserById(userId, newUserName){
+    const userFinded = this.getUserById(userId);
+    this.verifyValidName(newUserName);
+    if(userFinded === undefined){
+      throw new NonExistentException();
+    }
+    this.verifyExitingName(newUserName);
+    userFinded.name = newUserName;
+    return userFinded;
+  }
+
+  verifyValidName(userName){
+    if(userName === undefined){
+      throw new MissingDataException();
+    }
+  }
+
+  verifyExitingName(userName){
+    if(this.users.some(u => u.name === userName)){
+      throw new ExistException();
+    }
   }
 
   addArtist(artistData) {
+    this.verifyArtistData(artistData);
     if(this.artists.some(a => a.name === artistData.name)){
       throw new ExistException('Ya existe un artista con nombre: ' + artistData.name);
     }
@@ -65,6 +111,12 @@ class UNQfy {
     this.artists.push(newArtist);
     this.nextArtistId = this.nextArtistId + 1;
     return newArtist;
+  }
+
+  verifyArtistData(artistData) {
+    if(artistData.name === undefined || artistData.country === undefined){
+      throw new MissingDataException();
+    }
   }
 
   updateArtistById(id, artistData){
@@ -82,6 +134,7 @@ class UNQfy {
   }
 
   addAlbum(artistId, albumData) {
+    this.verifyAlbumData(albumData);
     const artistFinded = this.artists.find(a => a.id === artistId);
     if(artistFinded === undefined){
       throw new NonExistentException('No existe un artista con ID: ' + artistId);
@@ -92,15 +145,28 @@ class UNQfy {
     return newAlbum;
   }
 
+  verifyAlbumData(albumData) {
+    if(albumData.name === undefined || albumData.year === undefined){
+      throw new MissingDataException();
+    }
+  }
+
   addTrack(albumId, trackData) {
-    const albumFinded = this.artists.map(a => a.albums).flat().find(a => a.id === albumId);
-    if(albumFinded.tracks.some(t => t.name === trackData.name)){
-      throw new ExistException('Ya existe un track con nombre: ' + trackData.name);
+    this.verifyTrackData(trackData);
+    const albumFinded = this.getAlbumById(albumId);
+    if(albumFinded === undefined){
+      throw new NonExistentException();
     }
     const newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration);
     this.nextTrackId = this.nextTrackId + 1;
     albumFinded.addTrack(newTrack);
     return newTrack;
+  }
+
+  verifyTrackData(trackData) {
+    if(trackData.name === undefined || trackData.genres === undefined || trackData.duration === undefined){
+      throw new MissingDataException();
+    }
   }
 
   removeArtist(artistId){

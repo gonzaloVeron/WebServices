@@ -1,4 +1,6 @@
 const UnqfyController = require('./UnqfyController');
+const errores = require('../Exceptions/APIError');
+const nonExistentException = require('../NonExistentException');
 
 class PlaylistController {
 
@@ -10,11 +12,11 @@ class PlaylistController {
       res.status(201);
       res.json(playList.toJSON());
     } catch (err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RELATED_RESOURCE_NOT_FOUND'
-      });
+      if(err instanceof nonExistentException){
+        throw new errores.RelatedResourcesNotFound();
+      }else {
+        throw new errores.BadRequest();
+      }
     }
   }
 
@@ -25,11 +27,7 @@ class PlaylistController {
       res.status(200);
       res.json(playList.toJSON());
     } catch (err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
@@ -41,11 +39,7 @@ class PlaylistController {
       res.status(204);
       res.json();
     } catch(err){
-      res.status(404);
-      res.json({
-        status: 404,
-        errorCode: 'RESOURCE_NOT_FOUND'
-      });
+      throw new errores.ResourceNotFound();
     }
   }
 
