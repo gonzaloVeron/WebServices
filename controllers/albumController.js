@@ -8,7 +8,7 @@ class AlbumController {
   addAlbum(req, res) {
     const unqfy =  UnqfyController.getUNQfy();
     try{
-      const album = unqfy.addAlbum(parseInt(req.body.artistId), {name: req.body.name, year: req.body.year});
+      const album = unqfy.addAlbum(parseInt(req.body.artistId), {name: req.body.name, year: parseInt(req.body.year)});
       UnqfyController.saveUNQfy(unqfy);
       res.status(201);
       res.json(album.toJSON());

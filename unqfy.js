@@ -134,7 +134,7 @@ class UNQfy {
   }
 
   addAlbum(artistId, albumData) {
-    this.verifyAlbumData(albumData);
+    this.verifyAlbumData(artistId, albumData);
     const artistFinded = this.artists.find(a => a.id === artistId);
     if(artistFinded === undefined){
       throw new NonExistentException('No existe un artista con ID: ' + artistId);
@@ -145,8 +145,8 @@ class UNQfy {
     return newAlbum;
   }
 
-  verifyAlbumData(albumData) {
-    if(albumData.name === undefined || albumData.year === undefined){
+  verifyAlbumData(artistid, albumData) {
+    if(albumData.name === undefined || albumData.year === undefined || isNaN(artistid)){
       throw new MissingDataException();
     }
   }

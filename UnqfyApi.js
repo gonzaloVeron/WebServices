@@ -7,7 +7,6 @@ const userController = require('./controllers/userController');
 const bodyParser = require('body-parser');
 const errorHandler = require('./errorHandler');
 
-
 const app = express();
 const router = express.Router();
 

@@ -14,6 +14,7 @@ class TrackController {
         res.json(track.toJSON());
       });
     } catch(err){
+      console.log(err);
       throw new errores.ResourceNotFound();
     }
   }
