@@ -1,15 +1,16 @@
 
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
-const Playlist = require('./playlist');
-const Track = require('./track');
-const Artist = require('./artist');
-const Album = require('./album');
+const Playlist = require('./Playlist');
+const Track = require('./Track');
+const Artist = require('./Artist');
+const Album = require('./Album');
 const ExistException = require('./ExistException');
 const NonExistentException = require('./NonExistentException');
 const MissingDataException = require('./MissingDataException');
-const User = require('./user');
+const User = require('./User');
 const rp = require('request-promise');
+const Observer2 = require('./Observer2');
 const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
 
 class UNQfy {
@@ -22,6 +23,7 @@ class UNQfy {
     this._nextTrackId = 0;
     this._nextPlaylistId = 0;
     this._nextUserId = 0;
+    this._observer = new Observer2();
   }
 
   get nextArtistId(){return this._nextArtistId;}
@@ -107,7 +109,7 @@ class UNQfy {
     if(this.artists.some(a => a.name === artistData.name)){
       throw new ExistException('Ya existe un artista con nombre: ' + artistData.name);
     }
-    const newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country);
+    const newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country, this._observer);
     this.artists.push(newArtist);
     this.nextArtistId = this.nextArtistId + 1;
     return newArtist;
@@ -324,7 +326,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Album, Track, Playlist, User];
+    const classes = [UNQfy, Artist, Album, Track, Playlist, User, Observer2];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 
