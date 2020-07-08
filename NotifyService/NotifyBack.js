@@ -1,4 +1,6 @@
-const servicio = require('./Servicio');
+const picklify = require('picklify'); // para cargar/guarfar unqfy
+const fs = require('fs'); // para cargar/guarfar unqfy
+const { checkearExistenciaDeArtista } = require('./Servicio');
 const NonExistentException = require('./NonExistentException');
 const MissingDataException = require('./MissingDataException');
 const gmailClient = require('./gmail-tools/send-mail-example/gmailClient');
@@ -45,24 +47,25 @@ class NotifyBack{
 
     subscriptions(artistId){
         this.verifyArtistId(artistId);
-        this.verifyArtistInUnqfy(artistId);
+        //this.verifyArtistInUnqfy(artistId);
         const artist = this._subscriptions.find(obj => obj.artistId === artistId);
         return (artist) ? artist.email : [];
     }
-
+    
     deleteSubscriptions(artistId){
         this.verifyArtistId(artistId);
         this.verifyArtistInUnqfy(artistId);
         const artist = this._subscriptions.find(obj => obj.artistId === artistId);
         artist.emails = [];
     }
-
+    
     //--------------------//
-
+    
     verifyArtistInUnqfy(artistId){
-        if(!servicio.checkearExistenciaDArtista(artistId)){
-            throw new NonExistentException();
-        }
+        checkearExistenciaDeArtista(artistId)
+        /*if(!checkearExistenciaDeArtista(artistId)){
+            throw new NonExistentException()
+        }*/   
     }
 
     verifyEmail(email){
@@ -71,7 +74,7 @@ class NotifyBack{
         }
     }
     verifyArtistId(artistId){
-        if(!artistId){
+        if(isNaN(artistId)){
             throw new MissingDataException();
         }
     }
@@ -81,6 +84,24 @@ class NotifyBack{
             throw new MissingDataException();
         }
     }
+
+    save(filename) {
+        const listenersBkp = this.listeners;
+        this.listeners = [];
+    
+        const serializedData = picklify.picklify(this);
+    
+        this.listeners = listenersBkp;
+        fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
+      }
+    
+      static load(filename) {
+        const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
+        const classes = [NotifyBack];
+        return picklify.unpicklify(JSON.parse(serializedData), classes);
+      }
 }
 
-module.export = new NotifyBack()
+module.exports = {
+    NotifyBack
+};

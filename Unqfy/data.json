@@ -12,9 +12,9 @@
       "_users": "__00004__",
       "_nextArtistId": 2,
       "_nextAlbumId": 2,
-      "_nextTrackId": 0,
+      "_nextTrackId": 3,
       "_nextPlaylistId": 0,
-      "_nextUserId": 0,
+      "_nextUserId": 2,
       "_observer": "__00005__",
       "listeners": "__00006__"
     },
@@ -22,27 +22,94 @@
       "0": "__00007__"
     },
     "__00003__": {},
-    "__00004__": {},
+    "__00004__": {
+      "0": "__00008__"
+    },
     "__00005__": {},
     "__00006__": {},
     "__00007__": {
       "_name": "Guns n' Roses",
       "_id": 0,
       "_country": "USA",
-      "_albums": "__00008__",
+      "_albums": "__00009__",
       "_observador": "__00005__"
     },
     "__00008__": {
-      "0": "__00009__"
+      "_id": 0,
+      "_name": "Spore",
+      "_songsHeard": "__00010__"
     },
     "__00009__": {
+      "0": "__00011__"
+    },
+    "__00010__": {
+      "0": "__00012__",
+      "1": "__00013__",
+      "2": "__00014__"
+    },
+    "__00011__": {
       "_name": "Use Your Illusion 1",
       "_id": 1,
       "_year": 1992,
       "_artist": "__00007__",
-      "_tracks": "__00010__"
+      "_tracks": "__00015__"
     },
-    "__00010__": {}
+    "__00012__": {
+      "trackName": "Welcome to the jungle",
+      "artistName": "Guns n' Roses",
+      "timesHeard": 4
+    },
+    "__00013__": {
+      "trackName": "Unleashed",
+      "artistName": "Guns n' Roses",
+      "timesHeard": 3
+    },
+    "__00014__": {
+      "trackName": "Victory",
+      "artistName": "Guns n' Roses",
+      "timesHeard": 1
+    },
+    "__00015__": {
+      "0": "__00016__",
+      "1": "__00017__",
+      "2": "__00018__"
+    },
+    "__00016__": {
+      "_name": "Unleashed",
+      "_id": 0,
+      "_album": "__00011__",
+      "_artist": "__00007__",
+      "_genres": "__00019__",
+      "_duration": 777,
+      "_lyrics": "We want to meet with you\nRain down from above\nWe love the things You do\nThere's healing in Your touch\nWe're hanging on\nEvery word You say\nHear the song\nWe're singing every day\nUnleash on us\n...\n\n******* This Lyrics is NOT for Commercial use *******\n(1409620039063)"
+    },
+    "__00017__": {
+      "_name": "Victory",
+      "_id": 1,
+      "_album": "__00011__",
+      "_artist": "__00007__",
+      "_genres": "__00020__",
+      "_duration": 666,
+      "_lyrics": ""
+    },
+    "__00018__": {
+      "_name": "Welcome to the jungle",
+      "_id": 2,
+      "_album": "__00011__",
+      "_artist": "__00007__",
+      "_genres": "__00021__",
+      "_duration": 555,
+      "_lyrics": ""
+    },
+    "__00019__": {
+      "0": "Rock"
+    },
+    "__00020__": {
+      "0": "Rock"
+    },
+    "__00021__": {
+      "0": "Rock"
+    }
   },
   "types": {
     "__00001__": "UNQfy",
@@ -52,8 +119,19 @@
     "__00005__": "Observer2",
     "__00006__": "Array",
     "__00007__": "Artist",
-    "__00008__": "Array",
-    "__00009__": "Album",
-    "__00010__": "Array"
+    "__00008__": "User",
+    "__00009__": "Array",
+    "__00010__": "Array",
+    "__00011__": "Album",
+    "__00012__": "Object",
+    "__00013__": "Object",
+    "__00014__": "Object",
+    "__00015__": "Array",
+    "__00016__": "Track",
+    "__00017__": "Track",
+    "__00018__": "Track",
+    "__00019__": "Array",
+    "__00020__": "Array",
+    "__00021__": "Array"
   }
 }

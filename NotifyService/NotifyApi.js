@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const errorHandler = require('./errorHandler');
-const NotifyController = require('./NotifyController');
+const SubscriptionController = require('./SubscriptionController');
 
 const app = express();
 const router = express.Router();
@@ -12,13 +12,13 @@ app.use(bodyParser.json());
 
 app.use('/api', router);
 
-router.route('/subscribe').post(NotifyController.subscribe);
+router.route('/subscribe').post(SubscriptionController.subscribe);
 
-router.route('/unsubscribe').post(NotifyController.unsuscribe);
+router.route('/unsubscribe').post(SubscriptionController.unsuscribe);
 
-router.route('/notify').post(NotifyController.notify);
+router.route('/notify').post(SubscriptionController.notify);
 
-router.route('/subscriptions').delete(NotifyController.deleteSubscriptionsByArtistId).get(NotifyController.getSubscriptionsByArtistId);;
+router.route('/subscriptions').delete(SubscriptionController.deleteSubscriptionsByArtistId).get(SubscriptionController.getSubscriptionsByArtistId);;
 
 app.use((req, res) => {
   res.status(404);
