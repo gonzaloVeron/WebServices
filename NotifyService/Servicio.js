@@ -8,9 +8,9 @@ module.exports = {
             json: true,
         };
         return rp.get(options).then(response => {
-            //console.log(response)
-            return response !== undefined
-        }).catch(err => { throw new NonExistentException() });
+            console.log(response)
+            return Promise.resolve(true);
+        }).catch(err => Promise.resolve(false));
     } 
 }
 

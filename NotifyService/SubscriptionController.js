@@ -61,9 +61,11 @@ class SubscriptionController {
   }
 
   getSubscriptionsByArtistId(req, res){
+    console.log("hola");
     const artistId = parseInt(req.query.artistId);
     let emails;
-    let notify = NotifyController.getNotify()
+    let notify = NotifyController.getNotify();
+    console.log("a ver gil que te pasa");
     try{
         emails = notify.subscriptions(artistId);
 
@@ -74,11 +76,12 @@ class SubscriptionController {
             throw new errores.BadRequest(); 
         }
     }
+    console.log("despues del try catch");
     res.status(200);
     res.json({
         "artistId": artistId,
         "subscriptors": emails
-      });
+    });
   }
 
   deleteSubscriptionsByArtistId(req, res){

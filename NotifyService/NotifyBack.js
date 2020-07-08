@@ -6,6 +6,7 @@ const MissingDataException = require('./MissingDataException');
 const gmailClient = require('./gmail-tools/send-mail-example/gmailClient');
 const { gmail } = require('googleapis/build/src/apis/gmail');
 const sendMail = require('./gmail-tools/send-mail-example/sendMail');
+const { throws } = require('assert');
 
 class NotifyBack{
     constructor(){
@@ -46,10 +47,19 @@ class NotifyBack{
     }
 
     subscriptions(artistId){
+        console.log("dadasdasd");
         this.verifyArtistId(artistId);
+        checkearExistenciaDeArtista(artistId).then(artistExist => {
+            console.log(artistExist);
+            if(artistExist){
+                const artist = this._subscriptions.find(obj => obj.artistId === artistId);
+                return (artist) ? artist.email : [];
+            } else {
+                throw new NonExistentException();
+            }
+        }).catch(err => false);
         //this.verifyArtistInUnqfy(artistId);
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-        return (artist) ? artist.email : [];
+        
     }
     
     deleteSubscriptions(artistId){
@@ -62,7 +72,7 @@ class NotifyBack{
     //--------------------//
     
     verifyArtistInUnqfy(artistId){
-        checkearExistenciaDeArtista(artistId)
+        return checkearExistenciaDeArtista(artistId)
         /*if(!checkearExistenciaDeArtista(artistId)){
             throw new NonExistentException()
         }*/   
@@ -93,13 +103,13 @@ class NotifyBack{
     
         this.listeners = listenersBkp;
         fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
-      }
+    }
     
-      static load(filename) {
+    static load(filename) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         const classes = [NotifyBack];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
-      }
+    }
 }
 
 module.exports = {
