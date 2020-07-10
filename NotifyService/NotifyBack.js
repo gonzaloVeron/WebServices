@@ -1,12 +1,15 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
-const { checkearExistenciaDeArtista } = require('./Servicio');
+//const { checkearExistenciaDeArtista } = require('./UnqfyClient');
 const NonExistentException = require('./NonExistentException');
 const MissingDataException = require('./MissingDataException');
+const UnqfyClient = require('./UnqfyClient');
 const gmailClient = require('./gmail-tools/send-mail-example/gmailClient');
 const { gmail } = require('googleapis/build/src/apis/gmail');
 const sendMail = require('./gmail-tools/send-mail-example/sendMail');
-const { throws } = require('assert');
+const { isRegExp } = require('util');
+const { nextTick } = require('process');
+const errores = require('./APIError');
 
 class NotifyBack{
     constructor(){
@@ -47,19 +50,16 @@ class NotifyBack{
     }
 
     subscriptions(artistId){
-        console.log("dadasdasd");
-        this.verifyArtistId(artistId);
-        checkearExistenciaDeArtista(artistId).then(artistExist => {
-            console.log(artistExist);
-            if(artistExist){
-                const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-                return (artist) ? artist.email : [];
-            } else {
-                throw new NonExistentException();
+        return UnqfyClient.checkearExistenciaDeArtista(artistId).then(
+            (existArtist) => {
+                if(existArtist){
+                    const artist = this._subscriptions.find(obj => obj.artistId === artistId);
+                    return Promise.resolve((artist) ? artist.email : []);
+                }else{
+                    throw new NonExistentException();
+                }
             }
-        }).catch(err => false);
-        //this.verifyArtistInUnqfy(artistId);
-        
+        ).catch(err => {return Promise.reject(err)})
     }
     
     deleteSubscriptions(artistId){
@@ -70,21 +70,9 @@ class NotifyBack{
     }
     
     //--------------------//
-    
-    verifyArtistInUnqfy(artistId){
-        return checkearExistenciaDeArtista(artistId)
-        /*if(!checkearExistenciaDeArtista(artistId)){
-            throw new NonExistentException()
-        }*/   
-    }
 
     verifyEmail(email){
         if(!email){
-            throw new MissingDataException();
-        }
-    }
-    verifyArtistId(artistId){
-        if(isNaN(artistId)){
             throw new MissingDataException();
         }
     }

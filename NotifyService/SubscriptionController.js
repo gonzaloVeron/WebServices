@@ -60,27 +60,22 @@ class SubscriptionController {
     res.json();
   }
 
-  getSubscriptionsByArtistId(req, res){
-    console.log("hola");
+  getSubscriptionsByArtistId(req, res, next){
     const artistId = parseInt(req.query.artistId);
-    let emails;
-    let notify = NotifyController.getNotify();
-    console.log("a ver gil que te pasa");
-    try{
-        emails = notify.subscriptions(artistId);
+    let notify = NotifyController.getNotify()
 
-    }catch(err){
+    notify.subscriptions(artistId).then((emails) => {
+        res.status(200);
+        res.json({
+            "artistId": artistId,
+            "subscriptors": emails
+        });
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest());
         }
-    }
-    console.log("despues del try catch");
-    res.status(200);
-    res.json({
-        "artistId": artistId,
-        "subscriptors": emails
     });
   }
 
