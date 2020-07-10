@@ -1,11 +1,15 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
-const { checkearExistenciaDeArtista } = require('./Servicio');
+//const { checkearExistenciaDeArtista } = require('./UnqfyClient');
 const NonExistentException = require('./NonExistentException');
 const MissingDataException = require('./MissingDataException');
+const UnqfyClient = require('./UnqfyClient');
 const gmailClient = require('./gmail-tools/send-mail-example/gmailClient');
 const { gmail } = require('googleapis/build/src/apis/gmail');
 const sendMail = require('./gmail-tools/send-mail-example/sendMail');
+const { isRegExp } = require('util');
+const { nextTick } = require('process');
+const errores = require('./APIError');
 
 class NotifyBack{
     constructor(){
@@ -46,10 +50,16 @@ class NotifyBack{
     }
 
     subscriptions(artistId){
-        this.verifyArtistId(artistId);
-        //this.verifyArtistInUnqfy(artistId);
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-        return (artist) ? artist.email : [];
+        return UnqfyClient.checkearExistenciaDeArtista(artistId).then(
+            (existArtist) => {
+                if(existArtist){
+                    const artist = this._subscriptions.find(obj => obj.artistId === artistId);
+                    return Promise.resolve((artist) ? artist.email : []);
+                }else{
+                    throw new NonExistentException();
+                }
+            }
+        ).catch(err => {return Promise.reject(err)})
     }
     
     deleteSubscriptions(artistId){
@@ -60,21 +70,9 @@ class NotifyBack{
     }
     
     //--------------------//
-    
-    verifyArtistInUnqfy(artistId){
-        checkearExistenciaDeArtista(artistId)
-        /*if(!checkearExistenciaDeArtista(artistId)){
-            throw new NonExistentException()
-        }*/   
-    }
 
     verifyEmail(email){
         if(!email){
-            throw new MissingDataException();
-        }
-    }
-    verifyArtistId(artistId){
-        if(isNaN(artistId)){
             throw new MissingDataException();
         }
     }

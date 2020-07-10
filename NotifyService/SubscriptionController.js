@@ -60,25 +60,23 @@ class SubscriptionController {
     res.json();
   }
 
-  getSubscriptionsByArtistId(req, res){
+  getSubscriptionsByArtistId(req, res, next){
     const artistId = parseInt(req.query.artistId);
-    let emails;
     let notify = NotifyController.getNotify()
-    try{
-        emails = notify.subscriptions(artistId);
 
-    }catch(err){
+    notify.subscriptions(artistId).then((emails) => {
+        res.status(200);
+        res.json({
+            "artistId": artistId,
+            "subscriptors": emails
+        });
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest());
         }
-    }
-    res.status(200);
-    res.json({
-        "artistId": artistId,
-        "subscriptors": emails
-      });
+    });
   }
 
   deleteSubscriptionsByArtistId(req, res){

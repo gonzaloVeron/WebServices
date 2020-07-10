@@ -18,7 +18,7 @@ router.route('/unsubscribe').post(SubscriptionController.unsuscribe);
 
 router.route('/notify').post(SubscriptionController.notify);
 
-router.route('/subscriptions').delete(SubscriptionController.deleteSubscriptionsByArtistId).get(SubscriptionController.getSubscriptionsByArtistId);;
+router.route('/subscriptions').delete(SubscriptionController.deleteSubscriptionsByArtistId).get(SubscriptionController.getSubscriptionsByArtistId);
 
 app.use((req, res) => {
   res.status(404);
