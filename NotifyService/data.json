@@ -1,0 +1,33 @@
+{
+  "rootObjects": [
+    {
+      "id": "__00001__",
+      "name": null
+    }
+  ],
+  "objects": {
+    "__00001__": {
+      "_subscriptions": "__00002__",
+      "listeners": "__00003__"
+    },
+    "__00002__": {
+      "0": "__00004__"
+    },
+    "__00003__": {},
+    "__00004__": {
+      "artistId": 0,
+      "emails": "__00005__"
+    },
+    "__00005__": {
+      "0": "ignacio.mendez0000@gmail.com",
+      "1": "Gonzalo Veron <gonveron96@gmail.com>"
+    }
+  },
+  "types": {
+    "__00001__": "NotifyBack",
+    "__00002__": "Array",
+    "__00003__": "Array",
+    "__00004__": "Object",
+    "__00005__": "Array"
+  }
+}

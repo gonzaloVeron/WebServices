@@ -4,102 +4,104 @@ const NotifyController = require('./NotifyController')
 
 class SubscriptionController {
 
-  subscribe(req, res) {
+  subscribe(req, res, next) {
     const artistId = parseInt(req.body.artistId);
     const email = req.body.email;
-    let notify = NotifyController.getNotify()
-    try{
-        notify.subscribe(email, artistId);
-    }catch(err){
-        if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
-        } else {
-            throw new errores.BadRequest(); 
-        }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
-  }
 
-  unsuscribe(req, res){
-    const artistId = parseInt(req.body.artistId);
-    const email = req.body.email;
-    let notify = NotifyController.getNotify()
-    try{
-        notify.unsubscribe(email, artistId);
-
-    }catch(err){
-        if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
-        } else {
-            throw new errores.BadRequest(); 
-        }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
-  }
-
-  notify(req, res){
-    const artistId = parseInt(req.body.artistId);
-    const subject = req.body.subject;
-    const message = req.body.message;
-    let notify = NotifyController.getNotify()
-    try{
-        notify.notify(artistId, subject, message);
-
-    }catch(err){
-        if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
-        } else {
-            throw new errores.BadRequest(); 
-        }
-    }
-    res.status(200);
-    res.json();
-  }
-
-  getSubscriptionsByArtistId(req, res){
-    console.log("hola");
-    const artistId = parseInt(req.query.artistId);
-    let emails;
     let notify = NotifyController.getNotify();
-    console.log("a ver gil que te pasa");
-    try{
-        emails = notify.subscriptions(artistId);
+    notify.subscribe(email, artistId).then((service) => {
+        
+        NotifyController.saveNotify(service);
+        
+        res.status(200);
+        res.json();
 
-    }catch(err){
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest());
         }
-    }
-    console.log("despues del try catch");
-    res.status(200);
-    res.json({
-        "artistId": artistId,
-        "subscriptors": emails
     });
   }
 
-  deleteSubscriptionsByArtistId(req, res){
+  unsubscribe(req, res, next){
     const artistId = parseInt(req.body.artistId);
-    let notify = NotifyController.getNotify()
-    try{
-        notify.deleteSubscriptions(artistId);
+    const email = req.body.email;
 
-    }catch(err){
+    let notify = NotifyController.getNotify();
+    notify.unsubscribe(email, artistId).then((service) => {
+        
+        NotifyController.saveNotify(service);
+        
+        res.status(200);
+        res.json();
+
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest()); 
         }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
+    });
+    
+  }
+
+  notify(req, res, next){
+    const artistId = parseInt(req.body.artistId);
+    const subject = req.body.subject;
+    const message = req.body.message;
+    let notify = NotifyController.getNotify();
+
+    notify.notify(artistId, subject, message).then(() => {
+    
+        res.status(200);
+        res.json();
+    }).catch(err => {
+        if(err instanceof NonExistentException){
+            next(new errores.ResourceNotFound());
+        } else {
+            next(new errores.BadRequest()); 
+        }
+    });
+  }
+
+  getSubscriptionsByArtistId(req, res, next){
+    const artistId = parseInt(req.query.artistId);
+    let notify = NotifyController.getNotify();
+
+    notify.subscriptions(artistId).then((emails) => {
+        res.status(200);
+        res.json({
+            "artistId": artistId,
+            "subscriptors": emails
+        });
+    }).catch(err => {
+        if(err instanceof NonExistentException){
+            next(new errores.ResourceNotFound());
+        } else {
+            next(new errores.BadRequest());
+        }
+    });
+  }
+
+  deleteSubscriptionsByArtistId(req, res, next){
+    const artistId = parseInt(req.body.artistId);
+    let notify = NotifyController.getNotify();
+    notify.deleteSubscriptions(artistId).then((service) => {
+
+        NotifyController.saveNotify(service);
+
+        res.status(200);
+        res.json();
+
+    }).catch(err => {
+        if(err instanceof NonExistentException){
+            next(new errores.ResourceNotFound());
+        } else {
+            next(new errores.BadRequest()); 
+        }
+    });
   }
 
 }
