@@ -8,12 +8,12 @@ const getGmailClient = require('./gmailClient');
 const gmailClient = getGmailClient();
 
 // Envia un mail, utilizando la funcion ZZZZ que termina haciendo un request a XXXXX
-function sendMessage(subject, message){
+function sendMessage(subject, message, mail){
   gmailClient.users.messages.send(
     {
       userId: 'me',
       requestBody: {
-        raw: createMessage(subject, message),
+        raw: createMessage(subject, message, mail),
       },
     }
   );

@@ -61,15 +61,15 @@ class NotifyBack{
     notify(artistId, subject, message){
         return this.verifyArtistId(artistId).then((id) => {
             return this.verifyNotify(subject, message).then((data) => {
-
                 const artist = this._subscriptions.find(obj => obj.artistId === id)
-                if(!artist){
-                    artist.email.forEach(e => sendMail.sendMessage(data.subject, data.message));
+                if(artist){
+                    artist.emails.forEach(e => sendMail.sendMessage(data.subject, data.message, e));
+                }else{
+                    throw new NonExistentException();
                 }
-
-                return Promise.resolve(this);
-
-            }).catch(err => Promise.reject(err));
+                
+                return Promise.resolve();
+            })
         }).catch(err => Promise.reject(err));
         //Gonzalo Veron <gonveron96@gmail.com>
     }
