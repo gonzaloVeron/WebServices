@@ -10,10 +10,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use('/api', router);
-
-app.use('/activated', LogginController.activate);
-app.use('/desactivated', LogginController.desactivate);
-app.use('/log', LogginController.log);
+router.route('/activate').post(LogginController.activate);
+router.route('/desactivate').post(LogginController.desactivate);
+router.route('/log').post(LogginController.log);
 
 app.use((req, res) => {
   res.status(404);

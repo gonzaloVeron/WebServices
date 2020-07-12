@@ -11,6 +11,7 @@ const MissingDataException = require('./MissingDataException');
 const User = require('./User');
 const rp = require('request-promise');
 const Observer2 = require('./Observer2');
+const LogginClient = require('./LogginClient');
 const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
 
 class UNQfy {
@@ -47,6 +48,7 @@ class UNQfy {
     const newUser = new User(this.nextUserId, userName);
     this.users.push(newUser);
     this.nextUserId = this.nextUserId + 1;
+    LogginClient.log('info', `Se agrego el usuario ${userName}`);
     return newUser;
   }
 
@@ -78,7 +80,9 @@ class UNQfy {
   }
 
   removeUser(userId){
+    const user = this.getUserById(userId);
     this.users.splice(this.users.indexOf(userId), 1);
+    LogginClient.log('info', `Se removio el usuario ${user.name}`);
   }
   
   updateUserById(userId, newUserName){
@@ -112,6 +116,7 @@ class UNQfy {
     const newArtist = new Artist(artistData.name, this.nextArtistId, artistData.country, this._observer);
     this.artists.push(newArtist);
     this.nextArtistId = this.nextArtistId + 1;
+    LogginClient.log('info', `Se agrego el artista ${artistData.name}`);
     return newArtist;
   }
 
@@ -144,6 +149,7 @@ class UNQfy {
     const newAlbum = new Album(albumData.name, this.nextAlbumId, albumData.year, artistFinded);
     artistFinded.addAlbum(newAlbum);
     this.nextAlbumId = this.nextAlbumId + 1;
+    LogginClient.log('info', `Se agrego el album ${albumData.name}`);
     return newAlbum;
   }
 
@@ -162,6 +168,7 @@ class UNQfy {
     const newTrack = new Track(trackData.name, this.nextTrackId, albumFinded, albumFinded._artist, trackData.genres, trackData.duration);
     this.nextTrackId = this.nextTrackId + 1;
     albumFinded.addTrack(newTrack);
+    LogginClient.log('info', `Se agrego el track ${trackData.name}`);
     return newTrack;
   }
 
@@ -175,23 +182,27 @@ class UNQfy {
     const artist = this.getArtistById(artistId);
     this.playLists.forEach(p => p.removeTracks(artist.albums.map(a => a.tracks).flat()));
     this.artists.splice(this.artists.indexOf(artist.id), 1);
+    LogginClient.log('info', `Se removio el artista ${artist.name}`);
   }
 
   removeAlbum(albumId){
     const album = this.getAlbumById(albumId);
     this.playLists.forEach(p => p.removeTracks(album.tracks));
     album.artist.removeAlbum(album);
+    LogginClient.log('info', `Se removio el album ${album.name}`);
   }
 
   removeTrack(trackId){
     const track = this.getTrackById(trackId);
     this.playLists.forEach(p => p.removeTrack(track));
     track.album.removeTrack(track);
+    LogginClient.log('info', `Se removio el track ${track.name}`);
   }
 
   removePlayList(playListId){
     const playList = this.playLists.find(p => p.id === playListId);
     this.playLists.splice(this.playLists.indexOf(playList), 1);
+    LogginClient.log('info', `Se removio la playlist ${playList.name}`);
   }
 
   searchByName(st){
@@ -300,6 +311,7 @@ class UNQfy {
     this.nextPlaylistId = this.nextPlaylistId + 1;
     tracks.forEach(t => newPlaylist.addTrack(t));
     this.playLists.push(newPlaylist);
+    LogginClient.log('info', `Se agrego la playlist ${name}`);
     return newPlaylist;
   }
 
@@ -310,6 +322,7 @@ class UNQfy {
     tracks.forEach(t => newPlaylist.addTrack(t));
     this.nextPlaylistId = this.nextPlaylistId + 1;
     this.playLists.push(newPlaylist);
+    LogginClient.log('info', `Se agrego la playlist ${name}`);
     return newPlaylist;
   }
 

@@ -17,11 +17,11 @@ class LogginController{
     log(req, res){
         const message = req.body.message;
         const level = req.body.level;
-        const fileName = req.body.fileName;
         try{
-            LogginBack.createLog(fileName, message, level);
+            LogginBack.createLog(message, level);
         } catch(err) {
-            
+            res.status(404)
+            res.json(err.message);
         }
         res.status(201);
         res.json();

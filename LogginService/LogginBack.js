@@ -1,4 +1,5 @@
 const fs = require('fs'); // para cargar/guarfar unqfy
+const LogglyClient = require('./LogglyClient');
 
 const messageLevel = {
     WARNING: 'warning',
@@ -13,9 +14,13 @@ class LogginBack{
         this._activated = true;
     }
 
-    createLog(fileName, message, level){
+    createLog(message, level){
+        const date = new Date().toLocaleDateString().replace("/", "-").replace("/", "-");
+        const time = new Date().toLocaleTimeString().replace(":", "-").replace(":", "-");
+        const fileName = date + "-" + time
         if(this._activated){
-            fs.writeFileSync(fileName, JSON.stringify({message, level}));
+            fs.writeFileSync(`./logs/${fileName}.txt`, JSON.stringify({message, level}));
+            LogglyClient.log(level, message);
         } else {
             throw new Error("Sistema desactivado");
         }
