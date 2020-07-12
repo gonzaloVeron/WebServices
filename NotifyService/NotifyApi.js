@@ -14,7 +14,7 @@ app.use('/api', router);
 
 router.route('/subscribe').post(SubscriptionController.subscribe);
 
-router.route('/unsubscribe').post(SubscriptionController.unsuscribe);
+router.route('/unsubscribe').post(SubscriptionController.unsubscribe);
 
 router.route('/notify').post(SubscriptionController.notify);
 

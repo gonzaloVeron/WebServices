@@ -4,48 +4,54 @@ const NotifyController = require('./NotifyController')
 
 class SubscriptionController {
 
-  subscribe(req, res) {
+  subscribe(req, res, next) {
     const artistId = parseInt(req.body.artistId);
     const email = req.body.email;
-    let notify = NotifyController.getNotify()
-    try{
-        notify.subscribe(email, artistId);
-    }catch(err){
+
+    let notify = NotifyController.getNotify();
+    notify.subscribe(email, artistId).then((service) => {
+        
+        NotifyController.saveNotify(service);
+        
+        res.status(200);
+        res.json();
+
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest());
         }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
+    });
   }
 
-  unsuscribe(req, res){
+  unsubscribe(req, res, next){
     const artistId = parseInt(req.body.artistId);
     const email = req.body.email;
-    let notify = NotifyController.getNotify()
-    try{
-        notify.unsubscribe(email, artistId);
 
-    }catch(err){
+    let notify = NotifyController.getNotify();
+    notify.unsubscribe(email, artistId).then((service) => {
+        
+        NotifyController.saveNotify(service);
+        
+        res.status(200);
+        res.json();
+
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest()); 
         }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
+    });
+    
   }
 
   notify(req, res){
     const artistId = parseInt(req.body.artistId);
     const subject = req.body.subject;
     const message = req.body.message;
-    let notify = NotifyController.getNotify()
+    let notify = NotifyController.getNotify();
     try{
         notify.notify(artistId, subject, message);
 
@@ -62,7 +68,7 @@ class SubscriptionController {
 
   getSubscriptionsByArtistId(req, res, next){
     const artistId = parseInt(req.query.artistId);
-    let notify = NotifyController.getNotify()
+    let notify = NotifyController.getNotify();
 
     notify.subscriptions(artistId).then((emails) => {
         res.status(200);
@@ -79,22 +85,23 @@ class SubscriptionController {
     });
   }
 
-  deleteSubscriptionsByArtistId(req, res){
+  deleteSubscriptionsByArtistId(req, res, next){
     const artistId = parseInt(req.body.artistId);
-    let notify = NotifyController.getNotify()
-    try{
-        notify.deleteSubscriptions(artistId);
+    let notify = NotifyController.getNotify();
+    notify.deleteSubscriptions(artistId).then((service) => {
 
-    }catch(err){
+        NotifyController.saveNotify(service);
+
+        res.status(200);
+        res.json();
+
+    }).catch(err => {
         if(err instanceof NonExistentException){
-            throw new errores.ResourceNotFound();
+            next(new errores.ResourceNotFound());
         } else {
-            throw new errores.BadRequest(); 
+            next(new errores.BadRequest()); 
         }
-    }
-    NotifyController.saveNotify(notify);
-    res.status(200);
-    res.json();
+    });
   }
 
 }

@@ -17,70 +17,124 @@ class NotifyBack{
     }
 
     subscribe(email, artistId){
-        this.verifyEmail(email);
-        this.verifyArtistId(artistId);
-        this.verifyArtistInUnqfy(artistId);
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-        if(artist && !artist.emails.any(e => e === email)){
-            artist.emails.push(email);
-        }else{
-            this._subscriptions.push({artistId, emails : [email]})
-        }
+        return this.verifyEmail(email).then((dirEmail) => {
+            return this.verifyArtistId(artistId).then((id) => {
+                return UnqfyClient.checkearExistenciaDeArtista(id).then((existArtist) => {
+                    if(existArtist){
+                        
+                        const artist = this._subscriptions.find(obj => obj.artistId === id);
+                        if(artist && !artist.emails.some(e => e === dirEmail)){
+                            artist.emails.push(dirEmail);
+                        }else{
+                            this._subscriptions.push({artistId : id, emails : [dirEmail]})
+                        }
+                        
+                        return Promise.resolve(this);
+                    }else{
+                        throw new NonExistentException();
+                    }
+                }).catch(err => Promise.reject(err));
+            }).catch(err => Promise.reject(err));
+        }).catch(err => Promise.reject(err));
     }  
 
     unsubscribe(email, artistId){
-        this.verifyEmail(email);
-        this.verifyArtistId(artistId);
-        this.verifyArtistInUnqfy(artistId)
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-        if(artist && artist.emails.any(e => e === email)){
-            artist.emails.splice(artist.emails.indexOf(email), 1);
-        }
-        
+        return this.verifyEmail(email).then((dirEmail) => {
+            return this.verifyArtistId(artistId).then((id) => {
+                return UnqfyClient.checkearExistenciaDeArtista(id).then((existArtist) => {
+                    if(existArtist){
+                        
+                        const artist = this._subscriptions.find(obj => obj.artistId === id);
+                        if(artist && artist.emails.some(e => e === dirEmail)){
+                            artist.emails.splice(artist.emails.indexOf(dirEmail), 1);
+                        }
+
+                        return Promise.resolve(this);
+                    }else{
+                        throw new NonExistentException();
+                    }
+                }).catch(err => Promise.reject(err));
+            }).catch(err => Promise.reject(err));
+        }).catch(err => Promise.reject(err));
     }
 
     notify(artistId, subject, message){
-        this.verifyArtistId(artistId);
-        this.verifyNotify(subject, message);
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId)
-        if(!artist){
-            artist.email.forEach(e => sendMail.sendMessage(subject, message, e));
-        }
+        return this.verifyArtistId(artistId).then((id) => {
+            return this.verifyNotify(subject, message).then((data) => {
+
+                const artist = this._subscriptions.find(obj => obj.artistId === id)
+                if(!artist){
+                    artist.email.forEach(e => sendMail.sendMessage(data.subject, data.message));
+                }
+
+                return Promise.resolve(this);
+
+            }).catch(err => Promise.reject(err));
+        }).catch(err => Promise.reject(err));
         //Gonzalo Veron <gonveron96@gmail.com>
     }
 
     subscriptions(artistId){
-        return UnqfyClient.checkearExistenciaDeArtista(artistId).then(
-            (existArtist) => {
-                if(existArtist){
-                    const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-                    return Promise.resolve((artist) ? artist.email : []);
-                }else{
-                    throw new NonExistentException();
-                }
-            }
-        ).catch(err => {return Promise.reject(err)})
+        return this.verifyArtistId(artistId).then((id) => {
+            return UnqfyClient.checkearExistenciaDeArtista(id).then(
+                (existArtist) => {
+                    if(existArtist){
+
+                        const artist = this._subscriptions.find(obj => obj.artistId === id);
+                        const emails = (artist) ? artist.emails : []
+                        
+                        return Promise.resolve(emails);
+                    }else{
+                        throw new NonExistentException();
+                    }
+                }).catch(err => Promise.reject(err));
+        }).catch(err => Promise.reject(err));
     }
     
     deleteSubscriptions(artistId){
-        this.verifyArtistId(artistId);
-        this.verifyArtistInUnqfy(artistId);
-        const artist = this._subscriptions.find(obj => obj.artistId === artistId);
-        artist.emails = [];
+        return this.verifyArtistId(artistId).then((id) => {
+            return UnqfyClient.checkearExistenciaDeArtista(id).then(
+                (existArtist) => {
+                    if(existArtist){
+
+                        const artist = this._subscriptions.find(obj => obj.artistId === id);
+                        artist.emails = [];
+
+                        return Promise.resolve(this);
+                    }else{
+                        throw new NonExistentException();
+                    }
+                }).catch(err => Promise.reject(err));
+        }).catch(err => Promise.reject(err));
     }
     
-    //--------------------//
+    //------------------------------------------//
 
-    verifyEmail(email){
-        if(!email){
-            throw new MissingDataException();
-        }
+    verifyArtistId(artistId){
+        return new Promise((resolve, reject) => {
+            if(isNaN(artistId)){
+                throw new MissingDataException();
+            }
+            resolve(artistId);
+        }).catch(err => Promise.reject(err));
     }
-
+    
+    verifyEmail(email){
+        return new Promise((resolve, reject) => {
+            if(!email){
+                throw new MissingDataException();
+            }
+            resolve(email);
+        }).catch(err => Promise.reject(err));
+    }
+    
     verifyNotify(subject, message){
-        if(!subject || !message){
-            throw new MissingDataException();
-        }
+        return new Promise((resolve, reject) => {
+            if(!subject || !message){
+                throw new MissingDataException();
+            }
+            resolve({subject, message})
+        }).catch(err => Promise.reject(err));
     }
 
     save(filename) {
