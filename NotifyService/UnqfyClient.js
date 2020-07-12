@@ -11,6 +11,7 @@ class UnqfyClient{
                     return Promise.resolve(true)
                 }).catch(err => Promise.resolve(false));
     }
+
 }
 
 module.exports = new UnqfyClient();
