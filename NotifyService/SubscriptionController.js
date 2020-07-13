@@ -104,6 +104,11 @@ class SubscriptionController {
     });
   }
 
+  isAlive(req, res){
+      res.status(200);
+      res.json();
+  }
+
 }
 
 module.exports = new SubscriptionController();

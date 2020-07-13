@@ -15,6 +15,11 @@ class UnqfyController {
     unqfy.save(filename);
   }
 
+  static isAlive(req, res){
+    res.status(200);
+    res.json();
+  }
+
 }
 
 module.exports = UnqfyController;

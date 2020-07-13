@@ -13,6 +13,7 @@ app.use('/api', router);
 router.route('/activate').post(LogginController.activate);
 router.route('/desactivate').post(LogginController.desactivate);
 router.route('/log').post(LogginController.log);
+router.route('isAlive').get(LogginController.isAlive);
 
 app.use((req, res) => {
   res.status(404);

@@ -6,6 +6,7 @@ const playlistController = require('./controllers/playlistController');
 const userController = require('./controllers/userController');
 const bodyParser = require('body-parser');
 const errorHandler = require('./errorHandler');
+const UnqfyController = require('./controllers/UnqfyController');
 
 const app = express();
 const router = express.Router();
@@ -32,6 +33,9 @@ router.route('/user').post(userController.addUser);
 router.route('/user/:id').get(userController.getUserById).delete(userController.deleteUser).put(userController.updateUser);
 router.route('/user/:userId/:trackId').get(userController.getTimesHeard).post(userController.hear);
 router.route('/user/mostHeard/:userId/:artistId').get(userController.getMostHeard);
+
+router.route('/isAlive').get(UnqfyController.isAlive);
+
 
 app.use((req, res) => {
   res.status(404);

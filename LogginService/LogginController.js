@@ -26,6 +26,16 @@ class LogginController{
         res.status(201);
         res.json();
     }
+
+    isAlive(req, res){
+        if(LogginBack._activated){
+            res.status(200);
+            res.json();
+        } else {
+            res.status(500);
+            res.json();
+        }
+    }
 }
 
 module.exports = new LogginController();
