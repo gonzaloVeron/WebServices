@@ -1,6 +1,7 @@
 const rp = require("request-promise");
 
 const TOKEN = "euwIrXBgyq5cFSr70jS1rnHE";
+
 class SlackClient{
 
     postMessage(message){
