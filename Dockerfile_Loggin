@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:12
 # Utiliza la imagen de node 8 como base.
 # A partir de esta imagen se ejecutarán los comandos de abajo creando una nueva imagen.
 
@@ -10,29 +10,28 @@ ENV DEBUG=true
 WORKDIR /home/node/my_node_app
 
 # Copia el package.json package-lock.json en /home/node/my_node_app
-COPY /Unqfy/package.json .
-COPY /Unqfy/package-lock.json .
+COPY /LogginService/package.json .
+COPY /LogginService/package-lock.json .
 
 # Ejecuta npm install. Esto produce que se instalen todas las dependencias necearias para correr la aplicación
 RUN ["npm", "install"]
 
 # Expone el puerto 7000 donde corre la aplicación
-EXPOSE 7000
+EXPOSE 5000
 
 # Copia los fuentes dentro del container
-COPY Unqfy /home/node/my_node_app/
+COPY LogginService /home/node/my_node_app/
 
 # Le da permisos al usuario node para escribir en /home/node/my_node_app
 # Como comentario, notar que el comando RUN nos permite ejecutar culquier comando bash valido.
 RUN chown node:users /home/node/
-RUN chown node:users /home/node/my_node_app/Unqfy/data.json
 
 # Habilita el usuario node. Por defecto, los containers corren los comandos con el usuario root
 USER node
 
 # Comando por defecto sino se provee uno al hacer docker run
 # El comando corre el servicio
-CMD [ "node", "UnqfyApi" ]
+CMD [ "node", "LogginApi" ]
 
 # LISTO!
 

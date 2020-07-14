@@ -32,5 +32,5 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 
-app.listen(6000);
-console.log('Servidor corriendo en puerto 6000');
+app.listen(3000);
+console.log('Servidor corriendo en puerto 3000');

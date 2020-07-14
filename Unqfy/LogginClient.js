@@ -4,7 +4,7 @@ class LogginClient{
 
     log(level, message){
         const options = {
-            url: `http://localhost:5000/api/log`,
+            url: `http://172.20.0.23:5000/api/log`,
             body: {
                 "level": level,
                 "message": message
@@ -14,7 +14,7 @@ class LogginClient{
         return rp.post(options).then(response => {
                     console.log("pude mandar el log mostro")
                 }).catch(err => {
-                    console.log("algo malio sal")
+                    console.log("Algo malio sal en LogginClient")
                 });
     }
 }

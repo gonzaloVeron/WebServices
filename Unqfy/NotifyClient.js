@@ -1,17 +1,17 @@
 const rp = require('request-promise');
 
-class Observer2{
+class NotifyClient{
 
-    cambie(artistId, artistName, artistAlbumName){
+    notify(artistId, artistName, artistAlbumName){
         const options = {
-            url: "http://localhost:6000/api/notify",
+            url: "http://172.20.0.22:3000/api/notify",
             body: { artistId : artistId, subject : `Nuevo album para ${artistName} !`, message : `Se ha agregado el album ${artistAlbumName}` },
             json: true,
           };
         rp.post(options).then(response => {
             console.log("Envie el mensajito, mostro");
-        }).catch(err => console.log('Algo malio sal'));
+        }).catch(err => console.log('Algo malio sal en NotifyClient'));
     }
 }
 
-module.exports = Observer2;
+module.exports = NotifyClient;

@@ -10,7 +10,7 @@ const NonExistentException = require('./NonExistentException');
 const MissingDataException = require('./MissingDataException');
 const User = require('./User');
 const rp = require('request-promise');
-const Observer2 = require('./Observer2');
+const NotifyClient = require('./NotifyClient');
 const LogginClient = require('./LogginClient');
 const ACCESS_TOKEN = 'BQCxTfIZOEIzvwOcgtuL65_s5H-2RiRlIwGT2XDLOqy-rbfSxE8_cDJkRXNCYkY_-Mh3_5AM8EFby6N40LO94Ke0CdO5v7mzd5a-OnA2HpdAX4eSIoUp0G06O0aquRCe0EJHcne7LS2fG4Zh04nqf_SNsR4O0c_2TDu5Hg';
 
@@ -24,7 +24,7 @@ class UNQfy {
     this._nextTrackId = 0;
     this._nextPlaylistId = 0;
     this._nextUserId = 0;
-    this._observer = new Observer2();
+    this._observer = new NotifyClient();
   }
 
   get nextArtistId(){return this._nextArtistId;}
@@ -339,7 +339,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Album, Track, Playlist, User, Observer2];
+    const classes = [UNQfy, Artist, Album, Track, Playlist, User, NotifyClient];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 

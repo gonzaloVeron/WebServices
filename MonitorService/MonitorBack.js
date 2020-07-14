@@ -30,7 +30,7 @@ class MonitorBack{
 
     unqfyIsAlive(){
         const options = {
-            url: "http://localhost:7000/api/isAlive",
+            url: "http://172.20.0.21:7000/api/isAlive",
             json: true,
         };
         rp.get(options).then(response => {
@@ -41,14 +41,16 @@ class MonitorBack{
                 console.log("Esta vivo");
             }
         }).catch(err => {
+            if(this._unqfyAlive){
+                SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Unqfy ha dejado de funcionar")
+            }
             this._unqfyAlive = false
-            SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Unqfy ha dejado de funcionar")
         });
     }
 
     logginIsAlive(){
         const options = {
-            url: "http://localhost:5000/api/isAlive",
+            url: "http://172.20.0.23:5000/api/isAlive",
             json: true,
         };
         rp.post(options).then(response => {
@@ -59,14 +61,16 @@ class MonitorBack{
                 console.log("Esta vivo");
             }
         }).catch(err => {
+            if(this._logginAlive){
+                SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Loggin ha dejado de funcionar")
+            }
             this._logginAlive = false
-            SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Loggin ha dejado de funcionar")
         });
     }
 
     notifyIsAlive(){
         const options = {
-            url: "http://localhost:6000/api/isAlive",
+            url: "http://172.20.0.22:3000/api/isAlive",
             json: true,
         };
         rp.post(options).then(response => {
@@ -77,8 +81,10 @@ class MonitorBack{
                 console.log("Esta vivo");
             }
         }).catch(err => {
+            if(this._notifyAlive){
+                SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Notify ha dejado de funcionar")
+            }
             this._notifyAlive = false
-            SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Notify ha dejado de funcionar")
         });
     }
 

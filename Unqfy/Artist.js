@@ -13,7 +13,7 @@ class Artist{
     if(this.albums.some(a => a.name === album.name)){
       throw new ExistException('Ya existe un album con nombre: '+ album.name);
     }
-    this._observador.cambie(this.id, this.name, album.name);
+    this._observador.notify(this.id, this.name, album.name);
     this._albums.push(album);
   }
 
