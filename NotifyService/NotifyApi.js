@@ -20,7 +20,7 @@ router.route('/notify').post(SubscriptionController.notify);
 
 router.route('/subscriptions').delete(SubscriptionController.deleteSubscriptionsByArtistId).get(SubscriptionController.getSubscriptionsByArtistId);
 
-router.route('isAlive').get(SubscriptionController.isAlive);
+router.route('/isAlive').get(SubscriptionController.isAlive);
 
 app.use((req, res) => {
   res.status(404);

@@ -4,7 +4,7 @@ const SlackClient = require("./SlackClient");
 class MonitorBack{
 
     constructor(){
-        this._activated = true;
+        this._activated = false;
         this._unqfyAlive = true;
         this._notifyAlive = true;
         this._logginAlive = true;
@@ -12,7 +12,6 @@ class MonitorBack{
 
     activate(){
         this._activated = true;
-        return Promise.resolve();
     }
 
     desactivate(){
@@ -53,7 +52,7 @@ class MonitorBack{
             url: "http://172.20.0.23:5000/api/isAlive",
             json: true,
         };
-        rp.post(options).then(response => {
+        rp.get(options).then(response => {
             if(!this._logginAlive){
                 SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Loggin ha vuelto a funcionar")
                 this._logginAlive = true
@@ -73,7 +72,7 @@ class MonitorBack{
             url: "http://172.20.0.22:3000/api/isAlive",
             json: true,
         };
-        rp.post(options).then(response => {
+        rp.get(options).then(response => {
             if(!this._notifyAlive){
                 SlackClient.postMessage(new Date().toLocaleTimeString() + " El servicio Notify ha vuelto a funcionar")
                 this._notifyAlive = true

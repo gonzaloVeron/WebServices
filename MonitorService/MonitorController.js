@@ -3,9 +3,10 @@ const MonitorBack = require('./MonitorBack');
 class MonitorController{
 
     activate(req, res){
-        MonitorBack.activate().then(() =>{
+        if(!MonitorBack._activated){
+            MonitorBack.activate();
             MonitorBack.monitoreoPeriodico();
-        });
+        }
         res.status(200);
         res.json();
     }
